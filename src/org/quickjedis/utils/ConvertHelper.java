@@ -1,54 +1,40 @@
-package quick.jedis.utils;
+package org.quickjedis.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConvertHelper {
 
-	public static byte[] ObjectToBytes(Object obj) {
+	public static <T> T JsonBytesToObject(byte[] bytes, Class<T> className, String encoding) throws Exception {
+		String objJson = ConvertHelper.BytesToString(bytes, encoding);
+		return (T) JsonHelper.toObject(objJson, className);
+	}
+
+	public static <T> byte[] ObjectToJsonBytes(T obj, String encoding) throws Exception {
+		String objJson = JsonHelper.toJson(obj);
+		return ConvertHelper.StringToBytes(objJson, encoding);
+	}
+
+	public static byte[] StringToBytes(String obj, String encoding) {
 		if (obj == null)
-			return (byte[]) null;
-
+			return null;
 		try {
-			byte[] bytes = null;
-			ByteArrayOutputStream bo = new ByteArrayOutputStream();
-			ObjectOutputStream oo = new ObjectOutputStream(bo);
-			oo.writeObject(obj);
-
-			bytes = bo.toByteArray();
-
-			bo.close();
-			oo.close();
-			return bytes;
-		} catch (Exception e) {
-			System.out.println("translation" + e.getMessage());
+			return obj.getBytes(encoding);
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static Object BytesToObject(byte[] bytes) {
+	public static String BytesToString(byte[] bytes, String encoding) {
 		if (bytes == null)
-			return null;
+			return "";
 		try {
-			// bytearray to object
-			Object obj = null;
-			ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
-			ObjectInputStream oi = new ObjectInputStream(bi);
-
-			obj = oi.readObject();
-			bi.close();
-			oi.close();
-			return obj;
-		} catch (Exception e) {
-			System.out.println("translation" + e.getMessage());
+			return new String(bytes, encoding);
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return null;
+			return "";
 		}
 	}
 

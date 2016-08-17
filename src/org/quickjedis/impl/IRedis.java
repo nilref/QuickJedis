@@ -1,19 +1,28 @@
-package quick.jedis.impl;
+package org.quickjedis.impl;
 
 import java.util.Dictionary;
 import java.util.List;
 
 import redis.clients.jedis.Tuple;
 
-public interface IRedis extends ICache{
+public interface IRedis {
 
-	//Boolean Set(String key, String targetObject, int cacheMinutes);
+	// 获取List
+	<T> List<T> GetList(String key, Class<T> className);
+
+	// 获取Object
+	<T> T Get(String key, Class<T> className);
+
+	// 获取String
+	String GetString(String key);
+
+	// 获取Byte[]
+	String GetBytes(String key);
 
 	<T> Boolean Set(String key, T targetObject, int cacheMinutes);
 
-	//String Get(String key);
-
-	<T> T Get(String key);
+	<T> Boolean Set(String key, T targetObject);
+	// String Get(String key);
 
 	Boolean Expire(String key, int seconds);
 

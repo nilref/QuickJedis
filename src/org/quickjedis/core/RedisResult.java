@@ -1,4 +1,4 @@
-package quick.jedis.core;
+package org.quickjedis.core;
 
 public class RedisResult {
 

@@ -1,4 +1,4 @@
-package quick.jedis.utils;
+package org.quickjedis.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

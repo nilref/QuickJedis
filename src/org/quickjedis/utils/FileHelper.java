@@ -1,4 +1,4 @@
-package quick.jedis.utils;
+package org.quickjedis.utils;
 
 import java.io.File;
 
@@ -16,5 +16,9 @@ public class FileHelper {
 
 	public static String GetFullName(File file) {
 		return file.getAbsoluteFile().getPath();
+	}
+
+	public static String GetClassesPath() {
+		return FileHelper.class.getResource("/").toString().replace("file:/", "");
 	}
 }

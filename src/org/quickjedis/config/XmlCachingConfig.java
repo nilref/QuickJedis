@@ -1,19 +1,18 @@
-package quick.jedis.config;
+package org.quickjedis.config;
 
 import java.util.HashMap;
 import java.util.List;
 
+import org.quickjedis.core.InnerLogger;
+import org.quickjedis.core.RedisCache;
+import org.quickjedis.core.Unity;
+import org.quickjedis.core.XmlHelper;
+import org.quickjedis.impl.IRedis;
+import org.quickjedis.utils.StringHelper;
 import org.w3c.dom.Node;
 
-import quick.jedis.core.InnerLogger;
-import quick.jedis.core.RedisCache;
-import quick.jedis.core.Unity;
-import quick.jedis.core.XmlHelper;
-import quick.jedis.impl.ICache;
-import quick.jedis.utils.StringHelper;
-
 public class XmlCachingConfig {
-	public HashMap<String, ICache> CachePool = new HashMap<String, ICache>();
+	public HashMap<String, IRedis> RedisPool = new HashMap<String, IRedis>();
 	private GlobalConfig _GlobalConfig;
 	public List<Node> AllCacheXmlNodeList;
 
@@ -34,7 +33,7 @@ public class XmlCachingConfig {
 
 	private void _xmlCachingConfig(Node configNode, String configFile) throws Exception {
 		try {
-			this.ConfigureGlobalConfigFromXml(XmlHelper.GetXmlNode(configNode, "global"));
+			this.ConfigureGlobalConfigFromXml(configNode);
 			this.AllCacheXmlNodeList = XmlHelper.GetXmlNodes(configNode, "redis-node");
 			this.ConfigureCachesFromXml(this.AllCacheXmlNodeList);
 		} catch (Exception ex) {
@@ -65,39 +64,39 @@ public class XmlCachingConfig {
 					InnerLogger.Info("初始化缓存对象[" + key + "] 失败，未配置Name节点");
 				} else {
 					InnerLogger.Debug("初始化缓存对象=>ConvertXmlToCache[" + key + "]");
-					ICache cache = this.ConvertXmlToCache(xmlNode);
-					this.CachePool.put(key, cache);
+					IRedis cache = this.ConvertXmlToCache(xmlNode);
+					this.RedisPool.put(key, cache);
 				}
 			}
-			InnerLogger.Info("初始化缓存对象成功 [CachesCount=" + this.CachePool.size() + "]");
+			InnerLogger.Info("初始化缓存对象成功 [CachesCount=" + this.RedisPool.size() + "]");
 		} else
 			InnerLogger.Warn("初始化缓存对象失败 [EX=XmlNodeList is no childNode!]");
 	}
 
-	private ICache ConvertXmlToCache(Node xmlNode) {
+	private IRedis ConvertXmlToCache(Node xmlNode) {
 		try {
 			String nodeAttr = XmlHelper.GetNodeAttr(xmlNode, "name");
 			String type = "redis";
 			if ("redis" == type)
 				return this.ConvertXmlToRedisCache(nodeAttr, type, xmlNode);
 			InnerLogger.Error("初始化缓存对象警告：无效缓存类型 [Name=" + nodeAttr + "] [Type=" + type + "]");
-			return (ICache) null;
+			return (IRedis) null;
 		} catch (Exception ex) {
 			InnerLogger.Error("初始化缓存目标发生异常 [Name=" + XmlHelper.GetNodeAttr(xmlNode, "name") + "] [Type="
 					+ XmlHelper.GetNodeAttr(xmlNode, "type") + "] 异常信息：[" + ex.toString() + "]");
-			return (ICache) null;
+			return (IRedis) null;
 		}
 	}
 
-	private ICache ConvertXmlToRedisCache(String name, String type, Node xmlNode) {
+	private IRedis ConvertXmlToRedisCache(String name, String type, Node xmlNode) {
 		try {
 			RedisCache redisCache = new RedisCache(xmlNode);
 			InnerLogger.Info("初始化缓存对象[" + type + "][" + name + "] 成功");
-			return (ICache) redisCache;
+			return (IRedis) redisCache;
 		} catch (Exception ex) {
 			InnerLogger.Error("初始化缓存目标发生异常 ConvertXmlToRedisCache [Name=" + name + "][Type=" + type + "] 异常信息：["
 					+ ex.toString() + "]");
-			return (ICache) null;
+			return (IRedis) null;
 		}
 	}
 

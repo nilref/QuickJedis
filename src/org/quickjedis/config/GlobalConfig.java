@@ -1,8 +1,7 @@
-package quick.jedis.config;
+package org.quickjedis.config;
 
+import org.quickjedis.core.XmlHelper;
 import org.w3c.dom.Node;
-
-import quick.jedis.core.XmlHelper;
 
 public class GlobalConfig {
 	public Boolean ThrowException;
@@ -38,9 +37,9 @@ public class GlobalConfig {
 	public GlobalConfig(Node node) {
 		if (node == null)
 			return;
-		this.ThrowException = XmlHelper.GetNodeAttr(node, "ThrowException").toLowerCase() == "true";
-		this.IsLog = !(XmlHelper.GetNodeAttr(node, "IsLog").toLowerCase() == "false");
-		this.InnerLogPath = XmlHelper.GetNodeAttr(node, "InnerLogPath").toLowerCase();
+		this.ThrowException = XmlHelper.GetNodeAttr(node, "throw-exception").toLowerCase() == "true";
+		this.IsLog = !(XmlHelper.GetNodeAttr(node, "is-log").toLowerCase() == "false");
+		this.InnerLogPath = XmlHelper.GetNodeAttr(node, "inner-log-path").toLowerCase();
 	}
 
 	public GlobalConfig(Boolean ThrowException, Boolean IsLog, String InnerLogPath) {

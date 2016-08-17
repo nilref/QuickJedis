@@ -1,20 +1,19 @@
-package quick.jedis.core;
+package org.quickjedis.core;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import quick.jedis.utils.DateHelper;
-import quick.jedis.utils.DirectoryHelper;
-import quick.jedis.utils.EnvironmentHelper;
-import quick.jedis.utils.FileHelper;
-import quick.jedis.utils.StringHelper;
+import org.quickjedis.utils.DateHelper;
+import org.quickjedis.utils.DirectoryHelper;
+import org.quickjedis.utils.EnvironmentHelper;
+import org.quickjedis.utils.FileHelper;
+import org.quickjedis.utils.StringHelper;
 
 public class InnerLogger {
 	private static Lock lock = new ReentrantLock();
@@ -53,22 +52,24 @@ public class InnerLogger {
 					: InnerLogger.InnerLogPath + "Qjedis.log";
 		try {
 			File file = new File(InnerLogger.FileName);
-
-			if (StringHelper.IsNullOrEmpty(file.getCanonicalPath()))
-				InnerLogger.FileName = Paths
-						.get(EnvironmentHelper.GetSafeEnvironmentVariable("usr.dir"), InnerLogger.FileName).toString();
-			else if (!DirectoryHelper.Exists(file.getCanonicalPath()))
-				DirectoryHelper.CreateDirectory(file.getCanonicalPath());
+			// System.out.println("filepath: " +
+			// file.getAbsoluteFile().getPath());
+			// if (StringHelper.IsNullOrEmpty(file.getCanonicalPath()))
+			// InnerLogger.FileName = Paths
+			// .get(EnvironmentHelper.GetSafeEnvironmentVariable("usr.dir"),
+			// InnerLogger.FileName).toString();
+			// else
+			if (!DirectoryHelper.Exists(InnerLogger.InnerLogPath))
+				DirectoryHelper.CreateDirectory(InnerLogger.InnerLogPath);
 			Lock lock = InnerLogger.lock;
 			Boolean lockTaken = false;
 			try {
 				lockTaken = lock.tryLock();
 				try {
-
 					if (file.length() >= 524288000L) {
 						String destFileName = FileHelper.GetFullName(file).substring(0,
 								FileHelper.GetFullName(file).length() - FileHelper.GetExtension(file).length()) + "-"
-								+ DateHelper.GetDateNow("yyyy-MM-dd-hh-mm-ss-ffff") + FileHelper.GetExtension(file);
+								+ DateHelper.GetDateNow("yyyy-MM-dd-hh-mm-ss") + FileHelper.GetExtension(file);
 						Files.move(file.toPath(), new File(destFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
 						file.createNewFile();
 					}
@@ -78,8 +79,7 @@ public class InnerLogger {
 				if (lockTaken)
 					lock.unlock();
 			}
-			String str = DateHelper.GetDateNow("yyyy-MM-dd HH:mm:ss.ffff") + " " + "[" + level + "]" + " "
-					+ customerInfo;
+			String str = DateHelper.GetDateNow("yyyy-MM-dd HH:mm:ss") + " " + "[" + level + "]" + " " + customerInfo;
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(InnerLogger.FileName, true), EnvironmentHelper.GetDefaultEncoding()));
 			out.write(str);

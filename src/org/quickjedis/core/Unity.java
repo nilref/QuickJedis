@@ -1,4 +1,4 @@
-package quick.jedis.core;
+package org.quickjedis.core;
 
 public class Unity {
 	public static void CreateException(String errMsg) throws Exception {
@@ -7,7 +7,7 @@ public class Unity {
 
 	public static void CreateException(String errMsg, Exception innerEx) throws Exception {
 		// throw new ApplicationException(errMsg, innerEx);
-		throw new Exception(errMsg, innerEx);
+		throw new Exception(errMsg, innerEx.getCause());
 	}
 
 	public static String GetHostIP() {

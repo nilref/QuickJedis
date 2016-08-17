@@ -1,4 +1,4 @@
-package quick.jedis.core;
+package org.quickjedis.core;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,13 +12,17 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class XmlHelper {
 
 	public static String GetNodeAttr(Node xmlNode, String attrName) {
-		return xmlNode.getAttributes().getNamedItem(attrName).getNodeValue();
+		NamedNodeMap namedNodeMap = xmlNode.getAttributes();
+		Node node = namedNodeMap.getNamedItem(attrName);
+		return node.getNodeValue();
+		// return xmlNode.getAttributes().getNamedItem(attrName).getNodeValue();
 		// NamedNodeMap namedNodeMap = xmlNode.getAttributes();
 		// int len = namedNodeMap.getLength();
 		// for (int i = 0; i < len; i++) {
@@ -35,7 +39,7 @@ public class XmlHelper {
 		int len = nodeLst.getLength();
 		for (int i = 0; i < len; i++) {
 			Node node = nodeLst.item(i);
-			if (node.getLocalName().toLowerCase() == nodeName.toLowerCase())
+			if (node.getNodeName().toLowerCase() == nodeName.toLowerCase())
 				nodes.add(node);
 		}
 		return nodes;
@@ -46,7 +50,7 @@ public class XmlHelper {
 		int len = nodeLst.getLength();
 		for (int i = 0; i < len; i++) {
 			Node node = nodeLst.item(i);
-			if (node.getLocalName().toLowerCase() == nodeName.toLowerCase())
+			if (node.getNodeName().toLowerCase() == nodeName.toLowerCase())
 				return node;
 		}
 		return null;
