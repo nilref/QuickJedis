@@ -83,7 +83,7 @@ public class RedisCache extends CacheBase implements IRedis {
 		return ConvertHelper.BytesToString(bytes, this.Encoding);
 	}
 
-	private <T> byte[] ObjectToJsonBytes(T obj) {
+	private byte[] ObjectToJsonBytes(Object obj) {
 		try {
 			return this.StringToBytes(JsonHelper.toJson(obj));
 		} catch (Exception e) {
@@ -144,34 +144,41 @@ public class RedisCache extends CacheBase implements IRedis {
 		return null;
 	}
 
+	// @Override
+	// public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
+	// return _set(key, targetObject, cacheMinutes);
+	// }
+
 	@Override
-	public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
-		return _set(key, targetObject, cacheMinutes);
+	public Boolean Set(String key, Object targetObject) {
+		return this._set(key, this.ObjectToJsonBytes(targetObject), -1);
 	}
 
 	@Override
-	public <T> Boolean Set(String key, T targetObject) {
-		return _set(key, targetObject, -1);
+	public Boolean Set(String key, String text) {
+		return this._set(key, this.StringToBytes(text), -1);
 	}
 
-	@SuppressWarnings("deprecation")
-	private <T> Boolean _set(String key, T targetObject, int cacheMinutes) {
+	@Override
+	public Boolean Set(String key, byte[] bytes) {
+		return this._set(key, bytes, -1);
+	}
+
+	private <T> Boolean _set(String key, byte[] bytes, int cacheMinutes) {
 
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
 			byte[] keyArray = this.StringToBytes(key);
-			byte[] objJsonArray = this.ObjectToJsonBytes(targetObject);
 			if (cacheMinutes <= 0)
-				return RedisResult.OK == redisClient.set(keyArray, objJsonArray);
+				return RedisResult.OK == redisClient.set(keyArray, bytes);
 			else {
-				return RedisResult.OK == redisClient.set(keyArray, objJsonArray)
-						&& 1 == redisClient.expire(keyArray, cacheMinutes * 60);
+				return RedisResult.OK == redisClient.setex(keyArray, cacheMinutes * 60, bytes);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			this.RedisClientPool.returnBrokenResource(redisClient);
+			redisClient.close();
 		}
 		return false;
 	}

@@ -16,13 +16,16 @@ public interface IRedis {
 	// 获取String
 	String GetString(String key);
 
-	// 获取Byte[]
+	// 获取byte[]
 	byte[] GetBytes(String key);
 
-	<T> Boolean Set(String key, T targetObject, int cacheMinutes);
+	Boolean Set(String key, Object targetObject);
 
-	<T> Boolean Set(String key, T targetObject);
-	// String Get(String key);
+	Boolean Set(String key, String text);
+
+	Boolean Set(String key, byte[] bytes);
+
+	// <T> Boolean Set(String key, T targetObject, int cacheMinutes);
 
 	Boolean Expire(String key, int seconds);
 
