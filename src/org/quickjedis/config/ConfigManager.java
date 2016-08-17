@@ -27,17 +27,16 @@ public class ConfigManager {
 		XmlCachingConfig xmlCachingConfig = new XmlCachingConfig();
 
 		String filename = "QjedisConfig.xml";
-		// File file = new File(filename);
 		String classesPath = FileHelper.GetClassesPath();
 		final String str = Paths.get(classesPath, filename).toString();
 		Node configNode = null;
 		if (FileHelper.Exists(str)) {
 			configNode = XmlHelper.GetXmlNodeFromFile(str, "redis-root");
-			xmlCachingConfig = new XmlCachingConfig(configNode, str);
+			xmlCachingConfig = new XmlCachingConfig(configNode);
 		}
 
 		if (configNode == null)
-			Unity.CreateException("", new Exception(""));
+			Unity.CreateException("configNode is null", new Exception(""));
 		if (!StringHelper.IsNullOrEmpty(str)) {
 			ConfigManager.Observer = new FileAlterationObserver(classesPath, new FileFilter() {
 				@Override
@@ -61,7 +60,6 @@ public class ConfigManager {
 		public void onFileChange(File file) {
 			super.onFileChange(file);
 			try {
-				System.out.println("Config has change");
 				InnerLogger.Info(MessageFormat.format("ConfigFileChange FilePath:{0} FileName:{1}",
 						file.getCanonicalPath(), file.getName()));
 			} catch (IOException e) {

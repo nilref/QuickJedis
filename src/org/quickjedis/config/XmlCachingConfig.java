@@ -23,21 +23,17 @@ public class XmlCachingConfig {
 	public XmlCachingConfig() {
 	}
 
-	public XmlCachingConfig(Node configNode) throws Exception {
-		_xmlCachingConfig(configNode, "");
-	}
-
-	public XmlCachingConfig(Node configNode, String configFile) throws Exception {
-		_xmlCachingConfig(configNode, configFile);
-	}
-
-	private void _xmlCachingConfig(Node configNode, String configFile) throws Exception {
+	public XmlCachingConfig(Node configNode) {
 		try {
 			this.ConfigureGlobalConfigFromXml(configNode);
 			this.AllCacheXmlNodeList = XmlHelper.GetXmlNodes(configNode, "redis-node");
 			this.ConfigureCachesFromXml(this.AllCacheXmlNodeList);
 		} catch (Exception ex) {
-			Unity.CreateException(ex.getMessage(), ex);
+			try {
+				Unity.CreateException(ex.getMessage(), ex);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -76,11 +72,7 @@ public class XmlCachingConfig {
 	private IRedis ConvertXmlToCache(Node xmlNode) {
 		try {
 			String nodeAttr = XmlHelper.GetNodeAttr(xmlNode, "name");
-			String type = "redis";
-			if ("redis" == type)
-				return this.ConvertXmlToRedisCache(nodeAttr, type, xmlNode);
-			InnerLogger.Error("初始化缓存对象警告：无效缓存类型 [Name=" + nodeAttr + "] [Type=" + type + "]");
-			return (IRedis) null;
+			return this.ConvertXmlToRedisCache(nodeAttr, "redis", xmlNode);
 		} catch (Exception ex) {
 			InnerLogger.Error("初始化缓存目标发生异常 [Name=" + XmlHelper.GetNodeAttr(xmlNode, "name") + "] [Type="
 					+ XmlHelper.GetNodeAttr(xmlNode, "type") + "] 异常信息：[" + ex.toString() + "]");

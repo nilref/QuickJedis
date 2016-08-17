@@ -17,7 +17,7 @@ public interface IRedis {
 	String GetString(String key);
 
 	// 获取Byte[]
-	String GetBytes(String key);
+	byte[] GetBytes(String key);
 
 	<T> Boolean Set(String key, T targetObject, int cacheMinutes);
 

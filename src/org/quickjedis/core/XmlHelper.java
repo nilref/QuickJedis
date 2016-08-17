@@ -22,15 +22,6 @@ public class XmlHelper {
 		NamedNodeMap namedNodeMap = xmlNode.getAttributes();
 		Node node = namedNodeMap.getNamedItem(attrName);
 		return node.getNodeValue();
-		// return xmlNode.getAttributes().getNamedItem(attrName).getNodeValue();
-		// NamedNodeMap namedNodeMap = xmlNode.getAttributes();
-		// int len = namedNodeMap.getLength();
-		// for (int i = 0; i < len; i++) {
-		// Node node = namedNodeMap.item(i);
-		// if (node.getNodeName().toLowerCase() == attrName.toLowerCase())
-		// return node.getNodeValue() == null ? "" : node.getNodeValue();
-		// }
-		// return "";
 	}
 
 	public static List<Node> GetXmlNodes(Node xmlNode, String nodeName) {

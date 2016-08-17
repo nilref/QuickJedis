@@ -4,42 +4,43 @@ import java.util.Dictionary;
 import java.util.List;
 
 import org.quickjedis.impl.IRedis;
+import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
 import org.quickjedis.utils.ConvertHelper.TryParseResult;
+import org.quickjedis.utils.JsonHelper;
 import org.quickjedis.utils.StringHelper;
 import org.w3c.dom.Node;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 
 public class RedisCache extends CacheBase implements IRedis {
 	private JedisPool RedisClientPool;
 	private String Encoding;
-	private int DB;
+	private int DataBase;
 
 	public RedisCache(Node xmlNode) {
-		super(XmlHelper.GetNodeAttr(xmlNode, "name"));
-		_redisCache(XmlHelper.GetNodeAttr(xmlNode, "server"), XmlHelper.GetNodeAttr(xmlNode, "db"),
-				XmlHelper.GetNodeAttr(xmlNode, "encoding"));
+		this(XmlHelper.GetNodeAttr(xmlNode, "name"), XmlHelper.GetNodeAttr(xmlNode, "server"),
+				XmlHelper.GetNodeAttr(xmlNode, "db"), XmlHelper.GetNodeAttr(xmlNode, "encoding"));
 	}
 
 	public RedisCache(String name, String server, String db) {
-		super(name);
-		_redisCache(server, db, "UTF-8");
+		this(name, server, db, "UTF-8");
 	}
 
-	private void _redisCache(String server, String db, String encoding) {
-
+	public RedisCache(String name, String server, String db, String encoding) {
+		super(name);
 		// 设置DB
 		TryParseResult<Integer> tryRes = ConvertHelper.TryParseInt(db);
 		if (!tryRes.getSuccess())
-			DB = 0;
+			this.DataBase = 0;
 		else
-			DB = tryRes.getObject();
-		if (DB > 15 || DB < 0)
-			DB = 0;
+			this.DataBase = tryRes.getObject();
+		if (this.DataBase > 15 || this.DataBase < 0)
+			this.DataBase = 0;
 
 		// 设置编码
 		if (StringHelper.IsNullOrEmpty(encoding))
@@ -64,13 +65,14 @@ public class RedisCache extends CacheBase implements IRedis {
 		config.setTestOnBorrow(true);
 
 		String[] hostNport = hosts.split(":");
-		return new JedisPool(config, hostNport[0], Integer.parseInt(hostNport[1]));
+		// return new JedisPool(config, hostNport[0],
+		// Integer.parseInt(hostNport[1]));
+		return new JedisPool(config, hostNport[0], Integer.parseInt(hostNport[1]), Protocol.DEFAULT_TIMEOUT, null,
+				this.DataBase);
 	}
 
 	private Jedis GetResource() {
-		Jedis client = this.RedisClientPool.getResource();
-		client.select(this.DB);
-		return client;
+		return this.RedisClientPool.getResource();
 	}
 
 	private byte[] StringToBytes(String str) {
@@ -81,12 +83,65 @@ public class RedisCache extends CacheBase implements IRedis {
 		return ConvertHelper.BytesToString(bytes, this.Encoding);
 	}
 
-	private <T> byte[] ObjectToJsonBytes(T obj) throws Exception {
-		return ConvertHelper.ObjectToJsonBytes(obj, this.Encoding);
+	private <T> byte[] ObjectToJsonBytes(T obj) {
+		try {
+			return this.StringToBytes(JsonHelper.toJson(obj));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	private <T> T JsonBytesToObject(byte[] bytes, Class<T> className) throws Exception {
-		return ConvertHelper.JsonBytesToObject(bytes, className, this.Encoding);
+	private <T> T JsonBytesToObject(byte[] bytes, Class<T> className) {
+		try {
+			return JsonHelper.toObject(this.BytesToString(bytes), className);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public <T> List<T> GetList(String key, Class<T> className) {
+		try {
+			return JsonHelper.toList(this.GetString(key), className);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public <T> T Get(String key, Class<T> className) {
+		try {
+			return this.JsonBytesToObject(this.GetBytes(key), className);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public String GetString(String key) {
+		return this.BytesToString(this.GetBytes(key));
+	}
+
+	@Override
+	public byte[] GetBytes(String key) {
+		return this._get(key);
+	}
+
+	private byte[] _get(String key) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			return redisClient.get(this.StringToBytes(key));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
+		return null;
 	}
 
 	@Override
@@ -119,45 +174,6 @@ public class RedisCache extends CacheBase implements IRedis {
 			this.RedisClientPool.returnBrokenResource(redisClient);
 		}
 		return false;
-	}
-
-	// 获取List
-	public <T> List<T> GetList(String key, Class<T> className) {
-		return null;
-	}
-
-	// 获取Byte[]
-	public String GetBytes(String key) {
-		return null;
-	}
-
-	@Override
-	public String GetString(String key) {
-		return _get(key, String.class);
-	}
-
-	@Override
-	public <T> T Get(String key, Class<T> className) {
-		return _get(key, className);
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private <T> T _get(String key, Class<T> className) {
-		Jedis redisClient = null;
-		try {
-			redisClient = this.GetResource();
-			byte[] bs = redisClient.get(this.StringToBytes(key));
-			if (className == String.class)
-				return (T) this.BytesToString(bs);
-			else
-				return this.JsonBytesToObject(bs, className);
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			this.RedisClientPool.returnBrokenResource(redisClient);
-		}
-		return null;
 	}
 
 	@Override

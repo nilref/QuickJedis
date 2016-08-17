@@ -52,13 +52,6 @@ public class InnerLogger {
 					: InnerLogger.InnerLogPath + "Qjedis.log";
 		try {
 			File file = new File(InnerLogger.FileName);
-			// System.out.println("filepath: " +
-			// file.getAbsoluteFile().getPath());
-			// if (StringHelper.IsNullOrEmpty(file.getCanonicalPath()))
-			// InnerLogger.FileName = Paths
-			// .get(EnvironmentHelper.GetSafeEnvironmentVariable("usr.dir"),
-			// InnerLogger.FileName).toString();
-			// else
 			if (!DirectoryHelper.Exists(InnerLogger.InnerLogPath))
 				DirectoryHelper.CreateDirectory(InnerLogger.InnerLogPath);
 			Lock lock = InnerLogger.lock;

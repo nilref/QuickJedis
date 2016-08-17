@@ -43,9 +43,9 @@ public class GlobalConfig {
 	}
 
 	public GlobalConfig(Boolean ThrowException, Boolean IsLog, String InnerLogPath) {
-		ThrowException = false;
-		IsLog = false;
-		InnerLogPath = "";
+		this.ThrowException = ThrowException;
+		this.IsLog = IsLog;
+		this.InnerLogPath = InnerLogPath;
 	}
 
 	public GlobalConfig() {
