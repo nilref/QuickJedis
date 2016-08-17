@@ -1,8 +1,8 @@
 @echo off
 set REPOSITORY_PATH=E:\maven\maven-dependcies
-rem ÕıÔÚËÑË÷...
+rem æ­£åœ¨æœç´¢...
 for /f "delims=" %%i in ('dir /b /s "%REPOSITORY_PATH%\*lastUpdated*"') do (
     del /s /q %%i
 )
-rem ËÑË÷Íê±Ï
+rem æœç´¢å®Œæ¯•
 pause
