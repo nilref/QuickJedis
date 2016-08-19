@@ -1,5 +1,6 @@
 package org.quickjedis.utils;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -19,8 +20,13 @@ public class JsonHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T> T toObject(String jsonStr, Class<T> className) throws Exception {
-		return objectMapper.readValue(jsonStr, className);
+	public static <T> T toObject(String jsonStr, Class<T> className) {
+		try {
+			return objectMapper.readValue(jsonStr, className);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -32,9 +38,14 @@ public class JsonHelper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> toList(String jsonStr, Class<T> className) throws Exception {
+	public static <T> List<T> toList(String jsonStr, Class<T> className) {
 		JavaType javaType = getCollectionType(List.class, className);
-		return (List<T>) objectMapper.readValue(jsonStr, javaType);
+		try {
+			return (List<T>) objectMapper.readValue(jsonStr, javaType);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -44,9 +55,15 @@ public class JsonHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String toJson(Object obj) throws Exception {
+	public static String toJson(Object obj) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(obj);
+		try {
+			return objectMapper.writeValueAsString(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+
 	}
 
 	private static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {

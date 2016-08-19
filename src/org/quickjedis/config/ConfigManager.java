@@ -22,7 +22,7 @@ public class ConfigManager {
 
 	public static XmlCachingConfig CurrentConfig;
 
-	public static void InitCacheConfig() throws Exception {
+	public static void InitCacheConfig() {
 
 		XmlCachingConfig xmlCachingConfig = new XmlCachingConfig();
 
@@ -48,7 +48,11 @@ public class ConfigManager {
 			ConfigManager.Observer.addListener(new ConfigFileListener());
 			long interval = 5000l; // 轮询间隔 5000 毫秒
 			FileAlterationMonitor monitor = new FileAlterationMonitor(interval, ConfigManager.Observer);
-			monitor.start();
+			try {
+				monitor.start();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		ConfigManager.CurrentConfig = xmlCachingConfig;

@@ -9,11 +9,7 @@ import org.quickjedis.impl.IRedis;
 public class CacheFactory {
 	private static Lock lock = new ReentrantLock();
 	static {
-		try {
-			ConfigManager.InitCacheConfig();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		ConfigManager.InitCacheConfig();
 	}
 
 	public static IRedis CreateRedis(String cacheName, String server, Boolean isConvertSameCache) {
@@ -64,7 +60,7 @@ public class CacheFactory {
 		return redis2;
 	}
 
-	public static IRedis GetRedis(String cacheName) throws Exception {
+	public static IRedis GetRedis(String cacheName) {
 		String key = cacheName.toLowerCase();
 		Lock lock = CacheFactory.lock;
 		Boolean lockTaken = false;

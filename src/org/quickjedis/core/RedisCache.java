@@ -170,9 +170,9 @@ public class RedisCache extends CacheBase implements IRedis {
 		try {
 			redisClient = this.GetResource();
 			byte[] keyArray = this.StringToBytes(key);
-			if (cacheMinutes <= 0)
-				return RedisResult.OK == redisClient.set(keyArray, bytes);
-			else {
+			if (cacheMinutes <= 0) {
+				return RedisResult.OK.equals(redisClient.set(keyArray, bytes));
+			} else {
 				return RedisResult.OK == redisClient.setex(keyArray, cacheMinutes * 60, bytes);
 			}
 		} catch (Exception ex) {

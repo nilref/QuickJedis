@@ -2,7 +2,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.quickjedis</groupId>
   <artifactId>quickjedis</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <name>Quick Jedis</name>
   <description>Quick start using jedis.</description>
   <build>
@@ -50,4 +49,5 @@
   		<version>1.8.1</version>
   	</dependency>
   </dependencies>
+  <version>1.0.0</version>
 </project>

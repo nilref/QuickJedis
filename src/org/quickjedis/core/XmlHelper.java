@@ -47,17 +47,23 @@ public class XmlHelper {
 		return null;
 	}
 
-	public static Node GetXmlNodeFromFile(String fileName, String NodeLocalName) throws Exception {
-		File file = new File(fileName);
-		if (!file.exists())
-			return (Node) null;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setValidating(false);
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document xmlDocument = db.parse(new FileInputStream(file));
-		XPathFactory factory = XPathFactory.newInstance();
-		XPath xpath = factory.newXPath();
-		String xpathStr = NodeLocalName;
-		return (Node) xpath.evaluate(xpathStr, xmlDocument, XPathConstants.NODE);
+	public static Node GetXmlNodeFromFile(String fileName, String NodeLocalName) {
+		try {
+			File file = new File(fileName);
+			if (!file.exists())
+				return (Node) null;
+
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setValidating(false);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document xmlDocument = db.parse(new FileInputStream(file));
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath xpath = factory.newXPath();
+			String xpathStr = NodeLocalName;
+			return (Node) xpath.evaluate(xpathStr, xmlDocument, XPathConstants.NODE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 }

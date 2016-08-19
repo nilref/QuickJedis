@@ -19,10 +19,13 @@ public interface IRedis {
 	// 获取byte[]
 	byte[] GetBytes(String key);
 
+	// Object
 	Boolean Set(String key, Object targetObject);
 
+	// String
 	Boolean Set(String key, String text);
 
+	// byte[]
 	Boolean Set(String key, byte[] bytes);
 
 	// <T> Boolean Set(String key, T targetObject, int cacheMinutes);
