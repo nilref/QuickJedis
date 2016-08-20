@@ -6,6 +6,8 @@
   <description>Quick start using jedis.</description>
   <build>
     <sourceDirectory>src</sourceDirectory> 
+    <testSourceDirectory>src</testSourceDirectory>
+    <testOutputDirectory>target\classes</testOutputDirectory>
     <resources>
       <resource>
         <directory>src</directory>
@@ -47,6 +49,11 @@
   		<groupId>org.codehaus.jackson</groupId>
   		<artifactId>jackson-mapper-lgpl</artifactId>
   		<version>1.8.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.4</version>
   	</dependency>
   </dependencies>
   <version>1.0.0</version>
