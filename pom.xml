@@ -6,7 +6,7 @@
 	<name>Quick Jedis</name>
 	<description>Quick start using jedis.</description>
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
+		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>src</directory>
@@ -16,7 +16,7 @@
 				</excludes>
 			</resource>
 		</resources>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<!-- <testSourceDirectory>src/test/java</testSourceDirectory>
 		<testResources>
 			<testResource>
 				<directory>src</directory>
@@ -24,7 +24,7 @@
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</testResource>
-		</testResources>
+		</testResources> -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -33,6 +33,11 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
 			</plugin>
 		</plugins>
 	</build>
