@@ -19,8 +19,11 @@ public interface Redis {
 	// 获取byte[]
 	byte[] GetBytes(String key);
 
+	// List
+	<T> Boolean Set(String key, List<T> ListTargetObject);
+
 	// Object
-	Boolean Set(String key, Object targetObject);
+	<T> Boolean Set(String key, T targetObject);
 
 	// String
 	Boolean Set(String key, String text);

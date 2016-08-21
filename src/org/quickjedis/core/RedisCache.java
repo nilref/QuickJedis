@@ -3,14 +3,14 @@ package org.quickjedis.core;
 import java.util.Dictionary;
 import java.util.List;
 
-import org.w3c.dom.Node;
-
 import org.quickjedis.impl.Redis;
 import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
+import org.quickjedis.utils.ConvertHelper.TryParseResult;
 import org.quickjedis.utils.JsonHelper;
 import org.quickjedis.utils.StringHelper;
-import org.quickjedis.utils.ConvertHelper.TryParseResult;
+import org.w3c.dom.Node;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -83,7 +83,7 @@ public class RedisCache extends CacheBase implements Redis {
 		return ConvertHelper.BytesToString(bytes, this.Encoding);
 	}
 
-	private byte[] ObjectToJsonBytes(Object obj) {
+	private byte[] ObjectToBson(Object obj) {
 		try {
 			return this.StringToBytes(JsonHelper.toJson(obj));
 		} catch (Exception e) {
@@ -92,7 +92,7 @@ public class RedisCache extends CacheBase implements Redis {
 		}
 	}
 
-	private <T> T JsonBytesToObject(byte[] bytes, Class<T> className) {
+	private <T> T BsonToObject(byte[] bytes, Class<T> className) {
 		try {
 			return JsonHelper.toObject(this.BytesToString(bytes), className);
 		} catch (Exception e) {
@@ -114,7 +114,7 @@ public class RedisCache extends CacheBase implements Redis {
 	@Override
 	public <T> T Get(String key, Class<T> className) {
 		try {
-			return this.JsonBytesToObject(this.GetBytes(key), className);
+			return this.BsonToObject(this.GetBytes(key), className);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -148,10 +148,14 @@ public class RedisCache extends CacheBase implements Redis {
 	// public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
 	// return _set(key, targetObject, cacheMinutes);
 	// }
+	@Override
+	public <T> Boolean Set(String key, List<T> ListTargetObject) {
+		return this._set(key, this.ObjectToBson(ListTargetObject), -1);
+	}
 
 	@Override
-	public Boolean Set(String key, Object targetObject) {
-		return this._set(key, this.ObjectToJsonBytes(targetObject), -1);
+	public <T> Boolean Set(String key, T targetObject) {
+		return this._set(key, this.ObjectToBson(targetObject), -1);
 	}
 
 	@Override
