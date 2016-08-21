@@ -1,7 +1,8 @@
 package org.quickjedis.config;
 
-import org.quickjedis.core.XmlHelper;
 import org.w3c.dom.Node;
+
+import org.quickjedis.core.XmlHelper;
 
 public class GlobalConfig {
 	public Boolean ThrowException;

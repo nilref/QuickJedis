@@ -3,21 +3,21 @@ package org.quickjedis.core;
 import java.util.Dictionary;
 import java.util.List;
 
-import org.quickjedis.impl.IRedis;
-import org.quickjedis.model.RedisResult;
-import org.quickjedis.utils.ConvertHelper;
-import org.quickjedis.utils.ConvertHelper.TryParseResult;
-import org.quickjedis.utils.JsonHelper;
-import org.quickjedis.utils.StringHelper;
 import org.w3c.dom.Node;
 
+import org.quickjedis.impl.Redis;
+import org.quickjedis.model.RedisResult;
+import org.quickjedis.utils.ConvertHelper;
+import org.quickjedis.utils.JsonHelper;
+import org.quickjedis.utils.StringHelper;
+import org.quickjedis.utils.ConvertHelper.TryParseResult;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 
-public class RedisCache extends CacheBase implements IRedis {
+public class RedisCache extends CacheBase implements Redis {
 	private JedisPool RedisClientPool;
 	private String Encoding;
 	private int DataBase;
@@ -173,7 +173,7 @@ public class RedisCache extends CacheBase implements IRedis {
 			if (cacheMinutes <= 0) {
 				return RedisResult.OK.equals(redisClient.set(keyArray, bytes));
 			} else {
-				return RedisResult.OK == redisClient.setex(keyArray, cacheMinutes * 60, bytes);
+				return RedisResult.OK.equals(redisClient.setex(keyArray, cacheMinutes * 60, bytes));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

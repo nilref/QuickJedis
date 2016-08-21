@@ -5,7 +5,7 @@ import java.util.List;
 
 import redis.clients.jedis.Tuple;
 
-public interface IRedis {
+public interface Redis {
 
 	// 获取List
 	<T> List<T> GetList(String key, Class<T> className);

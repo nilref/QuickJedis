@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.quickjedis.config.ConfigManager;
-import org.quickjedis.impl.IRedis;
+import org.quickjedis.impl.Redis;
 
 public class CacheFactory {
 	private static Lock lock = new ReentrantLock();
@@ -12,8 +12,8 @@ public class CacheFactory {
 		ConfigManager.InitCacheConfig();
 	}
 
-	public static IRedis CreateRedis(String cacheName, String server, Boolean isConvertSameCache) {
-		IRedis redis1 = (IRedis) null;
+	public static Redis CreateRedis(String cacheName, String server, Boolean isConvertSameCache) {
+		Redis redis1 = (Redis) null;
 		String index = cacheName.toLowerCase();
 		if (!isConvertSameCache) {
 			Lock lock = CacheFactory.lock;
@@ -21,7 +21,7 @@ public class CacheFactory {
 			try {
 				lockTaken = lock.tryLock();
 				if (ConfigManager.CurrentConfig.RedisPool.containsKey(index))
-					redis1 = (IRedis) ConfigManager.CurrentConfig.RedisPool.get(index);
+					redis1 = (Redis) ConfigManager.CurrentConfig.RedisPool.get(index);
 			} finally {
 				if (lockTaken)
 					lock.unlock();
@@ -29,15 +29,15 @@ public class CacheFactory {
 			if (redis1 != null)
 				return redis1;
 		}
-		IRedis redis2 = (IRedis) new RedisCache(index, server, "0");
+		Redis redis2 = (Redis) new RedisCache(index, server, "0");
 		if (ConfigManager.CurrentConfig.RedisPool.containsKey(index))
 			ConfigManager.CurrentConfig.RedisPool.remove(index);
-		ConfigManager.CurrentConfig.RedisPool.put(index, (IRedis) redis2);
+		ConfigManager.CurrentConfig.RedisPool.put(index, (Redis) redis2);
 		return redis2;
 	}
 
-	public static IRedis CreateRedis(String cacheName, String server, int defaultDb, Boolean isConvertSameCache) {
-		IRedis redis1 = (IRedis) null;
+	public static Redis CreateRedis(String cacheName, String server, int defaultDb, Boolean isConvertSameCache) {
+		Redis redis1 = (Redis) null;
 		String index = cacheName.toLowerCase();
 		if (!isConvertSameCache) {
 			Lock lock = CacheFactory.lock;
@@ -45,7 +45,7 @@ public class CacheFactory {
 			try {
 				lockTaken = lock.tryLock();
 				if (ConfigManager.CurrentConfig.RedisPool.containsKey(index))
-					redis1 = (IRedis) ConfigManager.CurrentConfig.RedisPool.get(index);
+					redis1 = (Redis) ConfigManager.CurrentConfig.RedisPool.get(index);
 			} finally {
 				if (lockTaken)
 					lock.unlock();
@@ -53,28 +53,28 @@ public class CacheFactory {
 			if (redis1 != null)
 				return redis1;
 		}
-		IRedis redis2 = (IRedis) new RedisCache(index, server, String.valueOf(defaultDb));
+		Redis redis2 = (Redis) new RedisCache(index, server, String.valueOf(defaultDb));
 		if (ConfigManager.CurrentConfig.RedisPool.containsKey(index))
 			ConfigManager.CurrentConfig.RedisPool.remove(index);
-		ConfigManager.CurrentConfig.RedisPool.put(index, (IRedis) redis2);
+		ConfigManager.CurrentConfig.RedisPool.put(index, (Redis) redis2);
 		return redis2;
 	}
 
-	public static IRedis GetRedis(String cacheName) {
+	public static Redis GetRedis(String cacheName) {
 		String key = cacheName.toLowerCase();
 		Lock lock = CacheFactory.lock;
 		Boolean lockTaken = false;
 		try {
 			lockTaken = lock.tryLock();
 			if (ConfigManager.CurrentConfig.RedisPool.containsKey(key))
-				return (IRedis) ConfigManager.CurrentConfig.RedisPool.get(key);
+				return (Redis) ConfigManager.CurrentConfig.RedisPool.get(key);
 		} finally {
 			if (lockTaken)
 				lock.unlock();
 		}
 		InnerLogger.Warn("GetRedis '" + key + "' 失败, 不存在该缓存对象");
 		Unity.CreateException("GetRedis '" + key + "' 失败, 不存在该缓存对象");
-		return (IRedis) null;
+		return (Redis) null;
 	}
 
 }

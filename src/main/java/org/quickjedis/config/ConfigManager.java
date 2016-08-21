@@ -9,12 +9,13 @@ import java.text.MessageFormat;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.w3c.dom.Node;
+
 import org.quickjedis.core.InnerLogger;
 import org.quickjedis.core.Unity;
 import org.quickjedis.core.XmlHelper;
 import org.quickjedis.utils.FileHelper;
 import org.quickjedis.utils.StringHelper;
-import org.w3c.dom.Node;
 
 public class ConfigManager {
 

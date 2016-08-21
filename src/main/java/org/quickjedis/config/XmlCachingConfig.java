@@ -3,16 +3,17 @@ package org.quickjedis.config;
 import java.util.HashMap;
 import java.util.List;
 
+import org.w3c.dom.Node;
+
 import org.quickjedis.core.InnerLogger;
 import org.quickjedis.core.RedisCache;
 import org.quickjedis.core.Unity;
 import org.quickjedis.core.XmlHelper;
-import org.quickjedis.impl.IRedis;
+import org.quickjedis.impl.Redis;
 import org.quickjedis.utils.StringHelper;
-import org.w3c.dom.Node;
 
 public class XmlCachingConfig {
-	public HashMap<String, IRedis> RedisPool = new HashMap<String, IRedis>();
+	public HashMap<String, Redis> RedisPool = new HashMap<String, Redis>();
 	private GlobalConfig _GlobalConfig;
 	public List<Node> AllCacheXmlNodeList;
 
@@ -60,7 +61,7 @@ public class XmlCachingConfig {
 					InnerLogger.Info("初始化缓存对象[" + key + "] 失败，未配置Name节点");
 				} else {
 					InnerLogger.Debug("初始化缓存对象=>ConvertXmlToCache[" + key + "]");
-					IRedis cache = this.ConvertXmlToCache(xmlNode);
+					Redis cache = this.ConvertXmlToCache(xmlNode);
 					this.RedisPool.put(key, cache);
 				}
 			}
@@ -69,26 +70,26 @@ public class XmlCachingConfig {
 			InnerLogger.Warn("初始化缓存对象失败 [EX=XmlNodeList is no childNode!]");
 	}
 
-	private IRedis ConvertXmlToCache(Node xmlNode) {
+	private Redis ConvertXmlToCache(Node xmlNode) {
 		try {
 			String nodeAttr = XmlHelper.GetNodeAttr(xmlNode, "name");
 			return this.ConvertXmlToRedisCache(nodeAttr, "redis", xmlNode);
 		} catch (Exception ex) {
 			InnerLogger.Error("初始化缓存目标发生异常 [Name=" + XmlHelper.GetNodeAttr(xmlNode, "name") + "] [Type="
 					+ XmlHelper.GetNodeAttr(xmlNode, "type") + "] 异常信息：[" + ex.toString() + "]");
-			return (IRedis) null;
+			return (Redis) null;
 		}
 	}
 
-	private IRedis ConvertXmlToRedisCache(String name, String type, Node xmlNode) {
+	private Redis ConvertXmlToRedisCache(String name, String type, Node xmlNode) {
 		try {
 			RedisCache redisCache = new RedisCache(xmlNode);
 			InnerLogger.Info("初始化缓存对象[" + type + "][" + name + "] 成功");
-			return (IRedis) redisCache;
+			return (Redis) redisCache;
 		} catch (Exception ex) {
 			InnerLogger.Error("初始化缓存目标发生异常 ConvertXmlToRedisCache [Name=" + name + "][Type=" + type + "] 异常信息：["
 					+ ex.toString() + "]");
-			return (IRedis) null;
+			return (Redis) null;
 		}
 	}
 

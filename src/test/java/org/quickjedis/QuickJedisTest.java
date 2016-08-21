@@ -1,22 +1,21 @@
-package org.quickjedis.test;
+package org.quickjedis;
 
 import java.io.UnsupportedEncodingException;
 
-import org.quickjedis.utils.JsonHelper;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.quickjedis.utils.JsonHelper;
 
-public class QuickJedis extends TestCase {
+public class QuickJedisTest extends TestCase {
 
 	private static final String key = "wsy.test";
 
-	public QuickJedis(String name) {
+	public QuickJedisTest(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
 
-	public QuickJedis() {
+	public QuickJedisTest() {
 		// TODO Auto-generated constructor stub
 	}
 

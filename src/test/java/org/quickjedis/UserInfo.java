@@ -1,4 +1,4 @@
-package org.quickjedis.test;
+package org.quickjedis;
 
 public class UserInfo {
 
