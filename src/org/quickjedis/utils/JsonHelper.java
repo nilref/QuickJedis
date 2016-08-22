@@ -63,7 +63,6 @@ public class JsonHelper {
 			e.printStackTrace();
 			return "";
 		}
-
 	}
 
 	private static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
