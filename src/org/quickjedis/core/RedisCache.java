@@ -144,13 +144,14 @@ public class RedisCache extends CacheBase implements Redis {
 		return null;
 	}
 
-	// @Override
-	// public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
-	// return _set(key, targetObject, cacheMinutes);
-	// }
 	@Override
 	public <T> Boolean Set(String key, List<T> ListTargetObject) {
 		return this._set(key, this.ObjectToBson(ListTargetObject), -1);
+	}
+
+	@Override
+	public <T> Boolean Set(String key, List<T> ListTargetObject, int cacheMinutes) {
+		return this._set(key, this.ObjectToBson(ListTargetObject), cacheMinutes);
 	}
 
 	@Override
@@ -159,8 +160,18 @@ public class RedisCache extends CacheBase implements Redis {
 	}
 
 	@Override
+	public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
+		return this._set(key, this.ObjectToBson(targetObject), cacheMinutes);
+	}
+
+	@Override
 	public Boolean Set(String key, String text) {
 		return this._set(key, this.StringToBytes(text), -1);
+	}
+
+	@Override
+	public Boolean Set(String key, String text, int cacheMinutes) {
+		return this._set(key, this.StringToBytes(text), cacheMinutes);
 	}
 
 	@Override
@@ -168,8 +179,12 @@ public class RedisCache extends CacheBase implements Redis {
 		return this._set(key, bytes, -1);
 	}
 
-	private <T> Boolean _set(String key, byte[] bytes, int cacheMinutes) {
+	@Override
+	public Boolean Set(String key, byte[] bytes, int cacheMinutes) {
+		return this._set(key, bytes, cacheMinutes);
+	}
 
+	private <T> Boolean _set(String key, byte[] bytes, int cacheMinutes) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -189,13 +204,31 @@ public class RedisCache extends CacheBase implements Redis {
 
 	@Override
 	public Boolean Expire(String key, int seconds) {
-		// TODO Auto-generated method stub
-		return null;
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			return RedisResult.SUCCESS.equals(redisClient.expire(keyArray, seconds));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
+		return false;
 	}
 
 	@Override
 	public long TTL(String key) {
-		// TODO Auto-generated method stub
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			return redisClient.ttl(keyArray);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
 		return 0;
 	}
 

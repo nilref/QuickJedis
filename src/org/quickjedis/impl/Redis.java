@@ -22,16 +22,22 @@ public interface Redis {
 	// List
 	<T> Boolean Set(String key, List<T> ListTargetObject);
 
+	<T> Boolean Set(String key, List<T> ListTargetObject, int cacheMinutes);
+
 	// Object
 	<T> Boolean Set(String key, T targetObject);
+
+	<T> Boolean Set(String key, T targetObject, int cacheMinutes);
 
 	// String
 	Boolean Set(String key, String text);
 
+	Boolean Set(String key, String text, int cacheMinutes);
+
 	// byte[]
 	Boolean Set(String key, byte[] bytes);
 
-	// <T> Boolean Set(String key, T targetObject, int cacheMinutes);
+	Boolean Set(String key, byte[] bytes, int cacheMinutes);
 
 	Boolean Expire(String key, int seconds);
 

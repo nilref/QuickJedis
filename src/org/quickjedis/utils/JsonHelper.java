@@ -56,7 +56,6 @@ public class JsonHelper {
 	 * @throws Exception
 	 */
 	public static String toJson(Object obj) {
-		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			return objectMapper.writeValueAsString(obj);
 		} catch (IOException e) {
