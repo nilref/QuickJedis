@@ -3,14 +3,13 @@ package org.quickjedis.config;
 import java.util.HashMap;
 import java.util.List;
 
-import org.w3c.dom.Node;
-
 import org.quickjedis.core.InnerLogger;
+import org.quickjedis.core.Redis;
 import org.quickjedis.core.RedisCache;
 import org.quickjedis.core.Unity;
 import org.quickjedis.core.XmlHelper;
-import org.quickjedis.impl.Redis;
 import org.quickjedis.utils.StringHelper;
+import org.w3c.dom.Node;
 
 public class XmlCachingConfig {
 	public HashMap<String, Redis> RedisPool = new HashMap<String, Redis>();

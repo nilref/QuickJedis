@@ -4,7 +4,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.quickjedis.config.ConfigManager;
-import org.quickjedis.impl.Redis;
 
 public class CacheFactory {
 	private static Lock lock = new ReentrantLock();

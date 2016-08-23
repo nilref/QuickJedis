@@ -3,7 +3,6 @@ package org.quickjedis.core;
 import java.util.Dictionary;
 import java.util.List;
 
-import org.quickjedis.impl.Redis;
 import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
 import org.quickjedis.utils.ConvertHelper.TryParseResult;
@@ -17,7 +16,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Tuple;
 
-public class RedisCache extends CacheBase implements Redis {
+public class RedisCache extends Redis {
 	private JedisPool RedisClientPool;
 	private String Encoding;
 	private int DataBase;
@@ -71,18 +70,42 @@ public class RedisCache extends CacheBase implements Redis {
 				this.DataBase);
 	}
 
+	/**
+	 * 从连接池中获取连接
+	 * 
+	 * @return
+	 */
 	private Jedis GetResource() {
 		return this.RedisClientPool.getResource();
 	}
 
+	/**
+	 * 字符串转换成字节数组
+	 * 
+	 * @param str
+	 * @return
+	 */
 	private byte[] StringToBytes(String str) {
 		return ConvertHelper.StringToBytes(str, this.Encoding);
 	}
 
+	/**
+	 * 字节数组转换成字符串
+	 * 
+	 * @param bytes
+	 * @return
+	 */
 	private String BytesToString(byte[] bytes) {
 		return ConvertHelper.BytesToString(bytes, this.Encoding);
 	}
 
+	/**
+	 * Object 转换成 BSON
+	 * 
+	 * @param obj
+	 *            需要转换的对象
+	 * @return
+	 */
 	private byte[] ObjectToBson(Object obj) {
 		try {
 			return this.StringToBytes(JsonHelper.toJson(obj));
@@ -92,6 +115,15 @@ public class RedisCache extends CacheBase implements Redis {
 		}
 	}
 
+	/**
+	 * BSON 转换成 Object
+	 * 
+	 * @param bytes
+	 *            JSON字符串的字节数组
+	 * @param className
+	 *            要转换的对象类型 MyClass.class
+	 * @return
+	 */
 	private <T> T BsonToObject(byte[] bytes, Class<T> className) {
 		try {
 			return JsonHelper.toObject(this.BytesToString(bytes), className);
@@ -104,7 +136,11 @@ public class RedisCache extends CacheBase implements Redis {
 	@Override
 	public <T> List<T> GetList(String key, Class<T> className) {
 		try {
-			return JsonHelper.toList(this.GetString(key), className);
+			String jsonStr = this.GetString(key);
+			if (!StringHelper.IsNullOrEmpty(jsonStr))
+				return JsonHelper.toList(jsonStr, className);
+			else
+				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -114,7 +150,11 @@ public class RedisCache extends CacheBase implements Redis {
 	@Override
 	public <T> T Get(String key, Class<T> className) {
 		try {
-			return this.BsonToObject(this.GetBytes(key), className);
+			byte[] bytes = this.GetBytes(key);
+			if (bytes != null)
+				return this.BsonToObject(bytes, className);
+			else
+				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -123,7 +163,11 @@ public class RedisCache extends CacheBase implements Redis {
 
 	@Override
 	public String GetString(String key) {
-		return this.BytesToString(this.GetBytes(key));
+		byte[] bytes = this.GetBytes(key);
+		if (bytes != null)
+			return this.BytesToString(bytes);
+		else
+			return null;
 	}
 
 	@Override
@@ -145,13 +189,13 @@ public class RedisCache extends CacheBase implements Redis {
 	}
 
 	@Override
-	public <T> Boolean Set(String key, List<T> ListTargetObject) {
-		return this._set(key, this.ObjectToBson(ListTargetObject), -1);
+	public <T> Boolean Set(String key, List<T> ListObject) {
+		return this._set(key, this.ObjectToBson(ListObject), -1);
 	}
 
 	@Override
-	public <T> Boolean Set(String key, List<T> ListTargetObject, int cacheMinutes) {
-		return this._set(key, this.ObjectToBson(ListTargetObject), cacheMinutes);
+	public <T> Boolean Set(String key, List<T> ListObject, int cacheMinutes) {
+		return this._set(key, this.ObjectToBson(ListObject), cacheMinutes);
 	}
 
 	@Override
@@ -230,12 +274,6 @@ public class RedisCache extends CacheBase implements Redis {
 			redisClient.close();
 		}
 		return 0;
-	}
-
-	@Override
-	public List<String> GetValues(List<String> keys) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
