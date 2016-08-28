@@ -14,14 +14,56 @@ import redis.clients.jedis.Tuple;
 
 public abstract class Redis extends CacheBase
 		implements RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisSortedSet {
-
 	public Redis(String name) {
 		super(name);
 	}
 
-	abstract Boolean Exists(String key);
+	@Override
+	public abstract <T> List<T> GetList(String key, Class<T> className);
 
-	abstract long Del(String key);
+	@Override
+	public abstract <T> T Get(String key, Class<T> className);
+
+	@Override
+	public abstract String GetString(String key);
+
+	@Override
+	public abstract byte[] GetBytes(String key);
+
+	@Override
+	public abstract <T> Boolean Set(String key, List<T> ListObject);
+
+	@Override
+	public abstract <T> Boolean Set(String key, List<T> ListObject, int cacheMinutes);
+
+	@Override
+	public abstract <T> Boolean Set(String key, T targetObject);
+
+	@Override
+	public abstract <T> Boolean Set(String key, T targetObject, int cacheMinutes);
+
+	@Override
+	public abstract Boolean Set(String key, String text);
+
+	@Override
+	public abstract Boolean Set(String key, String text, int cacheMinutes);
+
+	@Override
+	public abstract Boolean Set(String key, byte[] bytes);
+
+	@Override
+	public abstract Boolean Set(String key, byte[] bytes, int cacheMinutes);
+
+	@Override
+	public abstract Boolean Expire(String key, int seconds);
+
+	@Override
+	public abstract long TTL(String key);
+
+	@Override
+	public abstract long Del(String key);
+
+	abstract Boolean Exists(String key);
 
 	// T Get<T>(String key, Func<T> initItemFunc, int cacheMinutes = 0);
 

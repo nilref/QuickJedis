@@ -125,4 +125,25 @@ public interface RedisString {
 	 * @return
 	 */
 	Boolean Set(String key, byte[] bytes, int cacheMinutes);
+
+	// APPEND
+	// BITCOUNT
+	// BITOP
+	// DECR
+	// DECRBY
+	// GETBIT
+	// GETRANGE
+	// GETSET
+	// INCR
+	// INCRBY
+	// INCRBYFLOAT
+	// MGET
+	// MSET
+	// MSETNX
+	// PSETEX
+	// SETBIT
+	// SETEX
+	// SETNX
+	// SETRANGE
+	// STRLEN
 }

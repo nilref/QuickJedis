@@ -20,4 +20,31 @@ public interface RedisKey {
 	 * @return
 	 */
 	long TTL(String key);
+
+	/**
+	 * 删除 key 以及对应的内容
+	 * 
+	 * @param key
+	 *            缓存的 key
+	 * @return
+	 */
+	long Del(String key);
+	// DUMP
+	// EXISTS
+	// EXPIREAT
+	// KEYS
+	// MIGRATE
+	// MOVE
+	// OBJECT
+	// PERSIST
+	// PEXPIRE
+	// PEXPIREAT
+	// PTTL
+	// RANDOMKEY
+	// RENAME
+	// RENAMENX
+	// RESTORE
+	// SORT
+	// TYPE
+	// SCAN
 }

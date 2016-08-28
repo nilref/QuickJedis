@@ -278,7 +278,16 @@ public class RedisCache extends Redis {
 
 	@Override
 	public long Del(String key) {
-		// TODO Auto-generated method stub
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			return redisClient.del(keyArray);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
 		return 0;
 	}
 
