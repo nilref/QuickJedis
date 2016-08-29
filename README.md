@@ -3,6 +3,8 @@ Quick start using jedis
 
 快速上手Jedis，更多的关注业务开发
 
+>在 src 下添加配置文件 QjedisConfig.xml
+
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <redis-root>
@@ -12,11 +14,11 @@ Quick start using jedis
 </redis-root>
 ```
 <br />
-<h4>配置说明：</h4>
-><b>name</b> : redis实例名称
+><h4>配置说明：</h4>
+>><b>name</b> : redis实例名称
 
-><b>server</b> : redis服务器IP:redis服务器端口
+>><b>server</b> : redis服务器IP:redis服务器端口
 
-><b>db</b> : redis数据库，从0到15
+>><b>db</b> : redis数据库，从0到15
 
-><b>encoding</b> : 数据编码
+>><b>encoding</b> : 数据编码
