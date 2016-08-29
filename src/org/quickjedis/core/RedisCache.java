@@ -172,10 +172,6 @@ public class RedisCache extends Redis {
 
 	@Override
 	public byte[] GetBytes(String key) {
-		return this._get(key);
-	}
-
-	private byte[] _get(String key) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -190,45 +186,41 @@ public class RedisCache extends Redis {
 
 	@Override
 	public <T> Boolean Set(String key, List<T> ListObject) {
-		return this._set(key, this.ObjectToBson(ListObject), -1);
+		return this.Set(key, this.ObjectToBson(ListObject), -1);
 	}
 
 	@Override
 	public <T> Boolean Set(String key, List<T> ListObject, int cacheMinutes) {
-		return this._set(key, this.ObjectToBson(ListObject), cacheMinutes);
+		return this.Set(key, this.ObjectToBson(ListObject), cacheMinutes);
 	}
 
 	@Override
 	public <T> Boolean Set(String key, T targetObject) {
-		return this._set(key, this.ObjectToBson(targetObject), -1);
+		return this.Set(key, this.ObjectToBson(targetObject), -1);
 	}
 
 	@Override
 	public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
-		return this._set(key, this.ObjectToBson(targetObject), cacheMinutes);
+		return this.Set(key, this.ObjectToBson(targetObject), cacheMinutes);
 	}
 
 	@Override
 	public Boolean Set(String key, String text) {
-		return this._set(key, this.StringToBytes(text), -1);
+		return this.Set(key, this.StringToBytes(text), -1);
 	}
 
 	@Override
 	public Boolean Set(String key, String text, int cacheMinutes) {
-		return this._set(key, this.StringToBytes(text), cacheMinutes);
+		return this.Set(key, this.StringToBytes(text), cacheMinutes);
 	}
 
 	@Override
 	public Boolean Set(String key, byte[] bytes) {
-		return this._set(key, bytes, -1);
+		return this.Set(key, bytes, -1);
 	}
 
 	@Override
 	public Boolean Set(String key, byte[] bytes, int cacheMinutes) {
-		return this._set(key, bytes, cacheMinutes);
-	}
-
-	private <T> Boolean _set(String key, byte[] bytes, int cacheMinutes) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -289,6 +281,57 @@ public class RedisCache extends Redis {
 			redisClient.close();
 		}
 		return 0;
+	}
+
+	@Override
+	public <T> T Hget(String key, String field, Class<T> className) {
+		try {
+			byte[] bytes = this.HgetBytes(key, field);
+			if (bytes != null)
+				return this.BsonToObject(bytes, className);
+			else
+				return className.cast(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public byte[] HgetBytes(String key, String field) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			byte[] fieldArray = this.StringToBytes(field);
+			return redisClient.hget(keyArray, fieldArray);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean Hset(String key, String field, String value) {
+		return this.Hset(key, field, this.StringToBytes(value));
+	}
+
+	@Override
+	public Boolean Hset(String key, String field, byte[] value) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			byte[] fieldArray = this.StringToBytes(field);
+			return RedisResult.SUCCESS.equals(redisClient.hset(keyArray, fieldArray, value));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			redisClient.close();
+		}
+		return false;
 	}
 
 	@Override

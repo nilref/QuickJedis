@@ -46,41 +46,45 @@ public class InnerLogger {
 	}
 
 	private static void WriteLog(String level, String customerInfo) {
-		if (!StringHelper.IsNullOrEmpty(InnerLogger.InnerLogPath))
+		if (!StringHelper.IsNullOrEmpty(InnerLogger.InnerLogPath)) {
 			InnerLogger.FileName = !InnerLogger.InnerLogPath.endsWith(InnerLogger.FilePathSplit)
 					? InnerLogger.InnerLogPath + InnerLogger.FilePathSplit + "Qjedis.log"
 					: InnerLogger.InnerLogPath + "Qjedis.log";
-		try {
-			File file = new File(InnerLogger.FileName);
-			if (!DirectoryHelper.Exists(InnerLogger.InnerLogPath))
-				DirectoryHelper.CreateDirectory(InnerLogger.InnerLogPath);
-			Lock lock = InnerLogger.lock;
-			Boolean lockTaken = false;
 			try {
-				lockTaken = lock.tryLock();
+				File file = new File(InnerLogger.FileName);
+				if (!DirectoryHelper.Exists(InnerLogger.InnerLogPath))
+					DirectoryHelper.CreateDirectory(InnerLogger.InnerLogPath);
+				Lock lock = InnerLogger.lock;
+				Boolean lockTaken = false;
 				try {
-					if (file.length() >= 524288000L) {
-						String destFileName = FileHelper.GetFullName(file).substring(0,
-								FileHelper.GetFullName(file).length() - FileHelper.GetExtension(file).length()) + "-"
-								+ DateHelper.GetDateNow("yyyy-MM-dd-hh-mm-ss") + FileHelper.GetExtension(file);
-						Files.move(file.toPath(), new File(destFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
-						file.createNewFile();
+					lockTaken = lock.tryLock();
+					try {
+						if (file.length() >= 524288000L) {
+							String destFileName = FileHelper.GetFullName(file).substring(0,
+									FileHelper.GetFullName(file).length() - FileHelper.GetExtension(file).length())
+									+ "-" + DateHelper.GetDateNow("yyyy-MM-dd-hh-mm-ss")
+									+ FileHelper.GetExtension(file);
+							Files.move(file.toPath(), new File(destFileName).toPath(),
+									StandardCopyOption.REPLACE_EXISTING);
+							file.createNewFile();
+						}
+					} catch (Exception ex) {
 					}
-				} catch (Exception ex) {
+				} finally {
+					if (lockTaken)
+						lock.unlock();
 				}
-			} finally {
-				if (lockTaken)
-					lock.unlock();
-			}
-			String str = DateHelper.GetDateNow("yyyy-MM-dd HH:mm:ss") + " " + "[" + level + "]" + " " + customerInfo;
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(InnerLogger.FileName, true), EnvironmentHelper.GetDefaultEncoding()));
-			out.write(str);
-			out.newLine();
-			out.close();
+				String str = DateHelper.GetDateNow("yyyy-MM-dd HH:mm:ss") + " " + "[" + level + "]" + " "
+						+ customerInfo;
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+						new FileOutputStream(InnerLogger.FileName, true), EnvironmentHelper.GetDefaultEncoding()));
+				out.write(str);
+				out.newLine();
+				out.close();
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }

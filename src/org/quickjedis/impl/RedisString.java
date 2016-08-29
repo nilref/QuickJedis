@@ -46,85 +46,85 @@ public interface RedisString {
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param ListObject
-	 *            要储存的对象 list
+	 * @param value
+	 *            要写入的值
 	 * @return
 	 */
-	<T> Boolean Set(String key, List<T> ListObject);
+	<T> Boolean Set(String key, List<T> value);
 
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param ListObject
-	 *            要储存的对象 list
+	 * @param value
+	 *            要写入的值
 	 * @param cacheMinutes
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> Boolean Set(String key, List<T> ListObject, int cacheMinutes);
+	<T> Boolean Set(String key, List<T> value, int cacheMinutes);
 
 	// Object
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param targetObject
-	 *            要储存的对象
+	 * @param value
+	 *            要写入的值
 	 * @return
 	 */
-	<T> Boolean Set(String key, T targetObject);
+	<T> Boolean Set(String key, T value);
 
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param targetObject
-	 *            要储存的对象
+	 * @param value
+	 *            要写入的值
 	 * @param cacheMinutes
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> Boolean Set(String key, T targetObject, int cacheMinutes);
+	<T> Boolean Set(String key, T value, int cacheMinutes);
 
 	// String
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param text
-	 *            需要保存的字符串
+	 * @param value
+	 *            要写入的值
 	 * @return
 	 */
-	Boolean Set(String key, String text);
+	Boolean Set(String key, String value);
 
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param text
-	 *            需要保存的字符串
+	 * @param value
+	 *            要写入的值
 	 * @param cacheMinutes
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	Boolean Set(String key, String text, int cacheMinutes);
+	Boolean Set(String key, String value, int cacheMinutes);
 
 	// byte[]
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param bytes
-	 *            要储存的字节数组
+	 * @param value
+	 *            要写入的值
 	 * @return
 	 */
-	Boolean Set(String key, byte[] bytes);
+	Boolean Set(String key, byte[] value);
 
 	/**
 	 * @param key
 	 *            缓存的 key
-	 * @param bytes
-	 *            要储存的字节数组
+	 * @param value
+	 *            要写入的值
 	 * @param cacheMinutes
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	Boolean Set(String key, byte[] bytes, int cacheMinutes);
+	Boolean Set(String key, byte[] value, int cacheMinutes);
 
 	// APPEND
 	// BITCOUNT

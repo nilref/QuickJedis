@@ -63,6 +63,18 @@ public abstract class Redis extends CacheBase
 	@Override
 	public abstract long Del(String key);
 
+	@Override
+	public abstract <T> T Hget(String key, String field, Class<T> className);
+
+	@Override
+	public abstract byte[] HgetBytes(String key, String field);
+
+	@Override
+	public abstract Boolean Hset(String key, String field, byte[] value);
+
+	@Override
+	public abstract Boolean Hset(String key, String field, String value);
+
 	abstract Boolean Exists(String key);
 
 	// T Get<T>(String key, Func<T> initItemFunc, int cacheMinutes = 0);

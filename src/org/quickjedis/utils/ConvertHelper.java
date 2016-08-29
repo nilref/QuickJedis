@@ -5,17 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConvertHelper {
-	//
-	// public static <T> T JsonBytesToObject(String objJson, Class<T> className)
-	// throws Exception {
-	// return (T) JsonHelper.toObject(objJson, className);
-	// }
-	//
-	// public static <T> byte[] ObjectToJsonBytes(String objJson, String
-	// encoding) throws Exception {
-	// // String objJson= JsonHelper.toJson(obj);
-	// return ConvertHelper.StringToBytes(objJson, encoding);
-	// }
+
+	public static Integer GetDefaultVal(Class<Integer> className) {
+		return 0;
+	}
+
+	public static Long GetDefaultVal(Class<Long> className) {
+		return (long) 0;
+	}
+
+	public static Byte GetDefaultVal(Class<Byte> className) {
+		return 0;
+	}
+
+	public static Short GetDefaultVal(Class<Short> className) {
+		return 0;
+	}
 
 	public static byte[] StringToBytes(String obj, String encoding) {
 		if (obj == null)

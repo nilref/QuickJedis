@@ -21,7 +21,9 @@ public class XmlHelper {
 	public static String GetNodeAttr(Node xmlNode, String attrName) {
 		NamedNodeMap namedNodeMap = xmlNode.getAttributes();
 		Node node = namedNodeMap.getNamedItem(attrName);
-		return node.getNodeValue();
+		if (node != null)
+			return node.getNodeValue();
+		return "";
 	}
 
 	public static List<Node> GetXmlNodes(Node xmlNode, String nodeName) {
