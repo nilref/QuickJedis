@@ -31,31 +31,31 @@ public abstract class Redis extends CacheBase
 	public abstract byte[] GetBytes(String key);
 
 	@Override
-	public abstract <T> Boolean Set(String key, List<T> ListObject);
+	public abstract <T> boolean Set(String key, List<T> ListObject);
 
 	@Override
-	public abstract <T> Boolean Set(String key, List<T> ListObject, int cacheMinutes);
+	public abstract <T> boolean Set(String key, List<T> ListObject, int cacheMinutes);
 
 	@Override
-	public abstract <T> Boolean Set(String key, T targetObject);
+	public abstract <T> boolean Set(String key, T targetObject);
 
 	@Override
-	public abstract <T> Boolean Set(String key, T targetObject, int cacheMinutes);
+	public abstract <T> boolean Set(String key, T targetObject, int cacheMinutes);
 
 	@Override
-	public abstract Boolean Set(String key, String text);
+	public abstract boolean Set(String key, String text);
 
 	@Override
-	public abstract Boolean Set(String key, String text, int cacheMinutes);
+	public abstract boolean Set(String key, String text, int cacheMinutes);
 
 	@Override
-	public abstract Boolean Set(String key, byte[] bytes);
+	public abstract boolean Set(String key, byte[] bytes);
 
 	@Override
-	public abstract Boolean Set(String key, byte[] bytes, int cacheMinutes);
+	public abstract boolean Set(String key, byte[] bytes, int cacheMinutes);
 
 	@Override
-	public abstract Boolean Expire(String key, int seconds);
+	public abstract boolean Expire(String key, int seconds);
 
 	@Override
 	public abstract long TTL(String key);
@@ -70,12 +70,15 @@ public abstract class Redis extends CacheBase
 	public abstract byte[] HgetBytes(String key, String field);
 
 	@Override
-	public abstract Boolean Hset(String key, String field, byte[] value);
+	public abstract boolean Hset(String key, String field, byte[] value);
 
 	@Override
-	public abstract Boolean Hset(String key, String field, String value);
+	public abstract boolean Hset(String key, String field, String value);
 
-	abstract Boolean Exists(String key);
+	@Override
+	public abstract long HincrBy(String key, String field, long increment);
+
+	abstract boolean Exists(String key);
 
 	// T Get<T>(String key, Func<T> initItemFunc, int cacheMinutes = 0);
 
@@ -91,7 +94,7 @@ public abstract class Redis extends CacheBase
 
 	abstract String LIndex(String listId, int listIndex);
 
-	abstract Boolean Remove(String key);
+	abstract boolean Remove(String key);
 
 	abstract long SCARD(String setid);
 
@@ -117,11 +120,11 @@ public abstract class Redis extends CacheBase
 
 	abstract double ZINCRBY(String setid, String member, int increment);
 
-	abstract List<Tuple> ZRANGE(String setid, int start, int stop, Boolean withScore);
+	abstract List<Tuple> ZRANGE(String setid, int start, int stop, boolean withScore);
 
-	abstract List<Tuple> ZREVRANGE(String setid, int start, int stop, Boolean withScore);
+	abstract List<Tuple> ZREVRANGE(String setid, int start, int stop, boolean withScore);
 
-	abstract List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, Boolean withScore);
+	abstract List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, boolean withScore);
 
 	abstract long ZREMRANGEBYRANK(String setid, int min, int max);
 
@@ -155,7 +158,7 @@ public abstract class Redis extends CacheBase
 
 	abstract Dictionary<String, String> Info();
 
-	abstract Boolean Ping();
+	abstract boolean Ping();
 
 	abstract List<String> SearchKeys(String pattern);
 }

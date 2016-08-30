@@ -50,7 +50,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	<T> Boolean Set(String key, List<T> value);
+	<T> boolean Set(String key, List<T> value);
 
 	/**
 	 * @param key
@@ -61,7 +61,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> Boolean Set(String key, List<T> value, int cacheMinutes);
+	<T> boolean Set(String key, List<T> value, int cacheMinutes);
 
 	// Object
 	/**
@@ -71,7 +71,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	<T> Boolean Set(String key, T value);
+	<T> boolean Set(String key, T value);
 
 	/**
 	 * @param key
@@ -82,7 +82,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> Boolean Set(String key, T value, int cacheMinutes);
+	<T> boolean Set(String key, T value, int cacheMinutes);
 
 	// String
 	/**
@@ -92,7 +92,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	Boolean Set(String key, String value);
+	boolean Set(String key, String value);
 
 	/**
 	 * @param key
@@ -103,7 +103,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	Boolean Set(String key, String value, int cacheMinutes);
+	boolean Set(String key, String value, int cacheMinutes);
 
 	// byte[]
 	/**
@@ -113,7 +113,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	Boolean Set(String key, byte[] value);
+	boolean Set(String key, byte[] value);
 
 	/**
 	 * @param key
@@ -124,7 +124,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	Boolean Set(String key, byte[] value, int cacheMinutes);
+	boolean Set(String key, byte[] value, int cacheMinutes);
 
 	// APPEND
 	// BITCOUNT

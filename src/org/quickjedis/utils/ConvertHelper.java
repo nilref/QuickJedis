@@ -1,10 +1,33 @@
 package org.quickjedis.utils;
 
+import static org.quickjedis.utils.ConvertHelper.GetDefaultVal;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConvertHelper {
+
+	@SuppressWarnings("unchecked")
+	public static <T> T GetDefaultVal(Class<T> className) {
+		if (Integer.class.equals(className) || int.class.equals(className))
+			return (T) GetDefaultVal(Integer.class);
+		if (Long.class.equals(className) || long.class.equals(className))
+			return (T) GetDefaultVal(Long.class);
+		if (Byte.class.equals(className) || byte.class.equals(className))
+			return (T) GetDefaultVal(Byte.class);
+		if (Short.class.equals(className) || short.class.equals(className))
+			return (T) GetDefaultVal(Short.class);
+		if (Float.class.equals(className) || float.class.equals(className))
+			return (T) GetDefaultVal(Float.class);
+		if (Double.class.equals(className) || double.class.equals(className))
+			return (T) GetDefaultVal(Double.class);
+		if (Character.class.equals(className) || char.class.equals(className))
+			return (T) GetDefaultVal(Character.class);
+		if (Boolean.class.equals(className) || boolean.class.equals(className))
+			return (T) GetDefaultVal(Boolean.class);
+		return (T) null;
+	}
 
 	public static Integer GetDefaultVal(Class<Integer> className) {
 		return 0;
@@ -20,6 +43,22 @@ public class ConvertHelper {
 
 	public static Short GetDefaultVal(Class<Short> className) {
 		return 0;
+	}
+
+	public static Float GetDefaultVal(Class<Float> className) {
+		return (float) 0;
+	}
+
+	public static Double GetDefaultVal(Class<Double> className) {
+		return (double) 0;
+	}
+
+	public static Character GetDefaultVal(Class<Character> className) {
+		return '\u0000';
+	}
+
+	public static Boolean GetDefaultVal(Class<Boolean> className) {
+		return false;
 	}
 
 	public static byte[] StringToBytes(String obj, String encoding) {

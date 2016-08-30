@@ -154,10 +154,10 @@ public class RedisCache extends Redis {
 			if (bytes != null)
 				return this.BsonToObject(bytes, className);
 			else
-				return null;
+				return ConvertHelper.GetDefaultVal(className);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return ConvertHelper.GetDefaultVal(className);
 		}
 	}
 
@@ -179,48 +179,49 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return null;
 	}
 
 	@Override
-	public <T> Boolean Set(String key, List<T> ListObject) {
+	public <T> boolean Set(String key, List<T> ListObject) {
 		return this.Set(key, this.ObjectToBson(ListObject), -1);
 	}
 
 	@Override
-	public <T> Boolean Set(String key, List<T> ListObject, int cacheMinutes) {
+	public <T> boolean Set(String key, List<T> ListObject, int cacheMinutes) {
 		return this.Set(key, this.ObjectToBson(ListObject), cacheMinutes);
 	}
 
 	@Override
-	public <T> Boolean Set(String key, T targetObject) {
+	public <T> boolean Set(String key, T targetObject) {
 		return this.Set(key, this.ObjectToBson(targetObject), -1);
 	}
 
 	@Override
-	public <T> Boolean Set(String key, T targetObject, int cacheMinutes) {
+	public <T> boolean Set(String key, T targetObject, int cacheMinutes) {
 		return this.Set(key, this.ObjectToBson(targetObject), cacheMinutes);
 	}
 
 	@Override
-	public Boolean Set(String key, String text) {
+	public boolean Set(String key, String text) {
 		return this.Set(key, this.StringToBytes(text), -1);
 	}
 
 	@Override
-	public Boolean Set(String key, String text, int cacheMinutes) {
+	public boolean Set(String key, String text, int cacheMinutes) {
 		return this.Set(key, this.StringToBytes(text), cacheMinutes);
 	}
 
 	@Override
-	public Boolean Set(String key, byte[] bytes) {
+	public boolean Set(String key, byte[] bytes) {
 		return this.Set(key, bytes, -1);
 	}
 
 	@Override
-	public Boolean Set(String key, byte[] bytes, int cacheMinutes) {
+	public boolean Set(String key, byte[] bytes, int cacheMinutes) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -233,13 +234,14 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return false;
 	}
 
 	@Override
-	public Boolean Expire(String key, int seconds) {
+	public boolean Expire(String key, int seconds) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -248,7 +250,8 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return false;
 	}
@@ -263,7 +266,8 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return 0;
 	}
@@ -278,7 +282,8 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return 0;
 	}
@@ -290,10 +295,10 @@ public class RedisCache extends Redis {
 			if (bytes != null)
 				return this.BsonToObject(bytes, className);
 			else
-				return className.cast(null);
+				return ConvertHelper.GetDefaultVal(className);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return ConvertHelper.GetDefaultVal(className);
 		}
 	}
 
@@ -308,18 +313,19 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return null;
 	}
 
 	@Override
-	public Boolean Hset(String key, String field, String value) {
+	public boolean Hset(String key, String field, String value) {
 		return this.Hset(key, field, this.StringToBytes(value));
 	}
 
 	@Override
-	public Boolean Hset(String key, String field, byte[] value) {
+	public boolean Hset(String key, String field, byte[] value) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -329,9 +335,27 @@ public class RedisCache extends Redis {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			redisClient.close();
+			if (redisClient != null)
+				redisClient.close();
 		}
 		return false;
+	}
+
+	@Override
+	public long HincrBy(String key, String field, long increment) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			byte[] fieldArray = this.StringToBytes(field);
+			return redisClient.hincrBy(keyArray, fieldArray, increment);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (redisClient != null)
+				redisClient.close();
+		}
+		return 0;
 	}
 
 	@Override
@@ -431,19 +455,19 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public List<Tuple> ZRANGE(String setid, int start, int stop, Boolean withScore) {
+	public List<Tuple> ZRANGE(String setid, int start, int stop, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Tuple> ZREVRANGE(String setid, int start, int stop, Boolean withScore) {
+	public List<Tuple> ZREVRANGE(String setid, int start, int stop, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, Boolean withScore) {
+	public List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -545,9 +569,9 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public Boolean Ping() {
+	public boolean Ping() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
@@ -557,15 +581,15 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public Boolean Exists(String key) {
+	public boolean Exists(String key) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public Boolean Remove(String key) {
+	public boolean Remove(String key) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 }

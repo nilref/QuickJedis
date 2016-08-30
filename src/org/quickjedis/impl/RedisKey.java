@@ -10,7 +10,7 @@ public interface RedisKey {
 	 *            过期时间，单位：秒
 	 * @return
 	 */
-	Boolean Expire(String key, int seconds);
+	boolean Expire(String key, int seconds);
 
 	/**
 	 * 查看 key 的到期时间

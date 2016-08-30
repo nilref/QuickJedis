@@ -38,7 +38,7 @@ public interface RedisHash {
 	 *            要写入的值
 	 * @return
 	 */
-	Boolean Hset(String key, String field, String value);
+	boolean Hset(String key, String field, String value);
 
 	/**
 	 * 向 hash 表中写入值
@@ -51,9 +51,22 @@ public interface RedisHash {
 	 *            要写入的值
 	 * @return
 	 */
-	Boolean Hset(String key, String field, byte[] value);
+	boolean Hset(String key, String field, byte[] value);
+
+	/**
+	 * 为哈希表 key 中的域 field 的值加上增量 increment
+	 * 
+	 * @param key
+	 *            缓存的 key
+	 * @param field
+	 *            hash 的字段名
+	 * @param increment
+	 *            需要增加的数值
+	 * @return
+	 */
+	long HincrBy(String key, String field, long increment);
 	// HGETALL
-	// HINCRBY
+
 	// HINCRBYFLOAT
 	// HKEYS
 	// HLEN
