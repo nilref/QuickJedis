@@ -1,7 +1,9 @@
 package org.quickjedis.core;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.quickjedis.impl.RedisHash;
 import org.quickjedis.impl.RedisKey;
@@ -14,151 +16,169 @@ import redis.clients.jedis.Tuple;
 
 public abstract class Redis extends CacheBase
 		implements RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisSortedSet {
-	public Redis(String name) {
+	public Redis(final String name) {
 		super(name);
 	}
 
 	@Override
-	public abstract <T> List<T> GetList(String key, Class<T> className);
+	public abstract <T> List<T> GetList(final String key, final Class<T> className);
 
 	@Override
-	public abstract <T> T Get(String key, Class<T> className);
+	public abstract <T> T Get(final String key, final Class<T> className);
 
 	@Override
-	public abstract String GetString(String key);
+	public abstract String GetString(final String key);
 
 	@Override
-	public abstract byte[] GetBytes(String key);
+	public abstract byte[] GetBytes(final String key);
 
 	@Override
-	public abstract <T> boolean Set(String key, List<T> ListObject);
+	public abstract <T> boolean Set(final String key, final List<T> ListObject);
 
 	@Override
-	public abstract <T> boolean Set(String key, List<T> ListObject, int cacheMinutes);
+	public abstract <T> boolean Set(final String key, final List<T> ListObject, final int cacheMinutes);
 
 	@Override
-	public abstract <T> boolean Set(String key, T targetObject);
+	public abstract <T> boolean Set(final String key, final T targetObject);
 
 	@Override
-	public abstract <T> boolean Set(String key, T targetObject, int cacheMinutes);
+	public abstract <T> boolean Set(final String key, final T targetObject, final int cacheMinutes);
 
 	@Override
-	public abstract boolean Set(String key, String text);
+	public abstract boolean Set(final String key, final String text);
 
 	@Override
-	public abstract boolean Set(String key, String text, int cacheMinutes);
+	public abstract boolean Set(final String key, final String text, final int cacheMinutes);
 
 	@Override
-	public abstract boolean Set(String key, byte[] bytes);
+	public abstract boolean Set(final String key, final byte[] bytes);
 
 	@Override
-	public abstract boolean Set(String key, byte[] bytes, int cacheMinutes);
+	public abstract boolean Set(final String key, final byte[] bytes, final int cacheMinutes);
 
 	@Override
-	public abstract boolean Expire(String key, int seconds);
+	public abstract boolean Expire(final String key, final int seconds);
 
 	@Override
-	public abstract long TTL(String key);
+	public abstract long TTL(final String key);
 
 	@Override
-	public abstract long Del(String key);
+	public abstract long Del(final String key);
 
 	@Override
-	public abstract <T> T Hget(String key, String field, Class<T> className);
+	public abstract <T> T Hget(final String key, final String field, final Class<T> className);
 
 	@Override
-	public abstract byte[] HgetBytes(String key, String field);
+	public abstract String HgetString(final String key, final String field);
 
 	@Override
-	public abstract boolean Hset(String key, String field, byte[] value);
+	public abstract byte[] HgetBytes(final String key, final String field);
 
 	@Override
-	public abstract boolean Hset(String key, String field, String value);
+	public abstract boolean Hset(final String key, final String field, final byte[] value);
 
 	@Override
-	public abstract long HincrBy(String key, String field, long increment);
+	public abstract boolean Hset(final String key, final String field, final String value);
 
-	abstract boolean Exists(String key);
+	@Override
+	public abstract long HincrBy(final String key, final String field, final long increment);
 
-	// T Get<T>(String key, Func<T> initItemFunc, int cacheMinutes = 0);
+	@Override
+	public abstract Set<Tuple> ZrangeWithScores(final String key, final long start, final long stop);
 
-	abstract long LLen(String queueId);
+	@Override
+	public abstract <T> Set<T> Zrange(final String key, final long start, final long stop, final Class<T> className);
 
-	// long Push<T>(String queueId, T value);
+	@Override
+	public abstract Set<byte[]> Zrange(final String key, final long start, final long stop);
 
-	abstract long Push(String queueId, String value);
+	@Override
+	public abstract <T> HashMap<Double, T> ZrangeWithScores(final String key, final long start, final long stop,
+			final Class<T> className);
 
-	// T Pop<T>(String queueId);
+	abstract boolean Exists(final String key);
 
-	abstract String Pop(String queueId);
+	// T Get<T>(final String key, Func<T> initItemFunc, final int cacheMinutes =
+	// 0);
 
-	abstract String LIndex(String listId, int listIndex);
+	abstract long LLen(final String queueId);
 
-	abstract boolean Remove(String key);
+	// long Push<T>(final String queueId, final T value);
 
-	abstract long SCARD(String setid);
+	abstract long Push(final String queueId, final String value);
 
-	abstract long SADD(String setid, String member);
+	// T Pop<T>(final String queueId);
 
-	abstract long SREM(String setid, String member);
+	abstract String Pop(final String queueId);
 
-	abstract String SPOP(String setid);
+	abstract String LIndex(final String listId, final int listIndex);
 
-	abstract List<String> SMEMBERS(String setid);
+	abstract boolean Remove(final String key);
 
-	abstract long SISMEMBER(String setid, String member);
+	abstract long SCARD(final String setid);
 
-	abstract void SMOVE(String setid, String toSetid, String member);
+	abstract long SADD(final String setid, final String member);
 
-	abstract long ZCARD(String setid);
+	abstract long SREM(final String setid, final String member);
 
-	abstract long ZADD(String setid, String member, int score);
+	abstract String SPOP(final String setid);
 
-	abstract long ZREM(String setid, String member);
+	abstract List<String> SMEMBERS(final String setid);
 
-	abstract double ZSCORE(String setid, String member);
+	abstract long SISMEMBER(final String setid, final String member);
 
-	abstract double ZINCRBY(String setid, String member, int increment);
+	abstract void SMOVE(final String setid, final String toSetid, final String member);
 
-	abstract List<Tuple> ZRANGE(String setid, int start, int stop, boolean withScore);
+	abstract long ZCARD(final String setid);
 
-	abstract List<Tuple> ZREVRANGE(String setid, int start, int stop, boolean withScore);
+	abstract long ZADD(final String setid, final String member, final int score);
 
-	abstract List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, boolean withScore);
+	abstract long ZREM(final String setid, final String member);
 
-	abstract long ZREMRANGEBYRANK(String setid, int min, int max);
+	abstract double ZSCORE(final String setid, final String member);
 
-	abstract long HIncrby(String hashId, String field, int incrementBy);
+	abstract double ZINCRBY(final String setid, final String member, final int increment);
 
-	abstract long HSet(String hashId, String field, String value);
+	abstract List<Tuple> ZRANGE(final String setid, final int start, final int stop, boolean withScore);
 
-	abstract void HMSet(String hashId, List<String> keyList, List<String> valueList);
+	abstract List<Tuple> ZREVRANGE(final String setid, final int start, final int stop, boolean withScore);
 
-	abstract List<String> HMGet(String hashId, List<String> keyList);
+	abstract List<Tuple> ZRANGEBYSCORE(final String setid, double min, double max, final int skip, final int take,
+			boolean withScore);
 
-	abstract String HGet(String hashId, String field);
+	abstract long ZREMRANGEBYRANK(final String setid, final int min, final int max);
 
-	abstract List<String> HGetValues(String hashId, List<String> keys);
+	abstract long HIncrby(final String hashId, final String field, final int incrementBy);
 
-	abstract Dictionary<String, String> HGetAll(String hashId);
+	abstract long HSet(final String hashId, final String field, final String value);
 
-	abstract long HDel(String hashId, String field);
+	abstract void HMSet(final String hashId, final List<String> keyList, final List<String> valueList);
 
-	abstract long HLen(String hashId);
+	abstract List<String> HMGet(final String hashId, final List<String> keyList);
 
-	abstract long Incr(String key);
+	abstract String HGet(final String hashId, final String field);
 
-	abstract long Decr(String key);
+	abstract List<String> HGetValues(final String hashId, final List<String> keys);
 
-	abstract long Increment(String key, int amount);
+	abstract Dictionary<String, String> HGetAll(final String hashId);
 
-	abstract long Decrement(String key, int amount);
+	abstract long HDel(final String hashId, final String field);
 
-	abstract long IncrementValueInHash(String hashId, String key, int incrementBy);
+	abstract long HLen(final String hashId);
+
+	abstract long Incr(final String key);
+
+	abstract long Decr(final String key);
+
+	abstract long Increment(final String key, final int amount);
+
+	abstract long Decrement(final String key, final int amount);
+
+	abstract long IncrementValueInHash(final String hashId, final String key, final int incrementBy);
 
 	abstract Dictionary<String, String> Info();
 
 	abstract boolean Ping();
 
-	abstract List<String> SearchKeys(String pattern);
+	abstract List<String> SearchKeys(final String pattern);
 }

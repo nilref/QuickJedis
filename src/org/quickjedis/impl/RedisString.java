@@ -12,7 +12,7 @@ public interface RedisString {
 	 *            要转换的对象类型 MyClass.class
 	 * @return
 	 */
-	<T> List<T> GetList(String key, Class<T> className);
+	<T> List<T> GetList(final String key, final Class<T> className);
 
 	/**
 	 * 获取指定类型的对象
@@ -23,7 +23,7 @@ public interface RedisString {
 	 *            要转换的对象类型 MyClass.class
 	 * @return
 	 */
-	<T> T Get(String key, Class<T> className);
+	<T> T Get(final String key, final Class<T> className);
 
 	/**
 	 * 获取字符串
@@ -32,7 +32,7 @@ public interface RedisString {
 	 *            缓存的 key
 	 * @return
 	 */
-	String GetString(String key);
+	String GetString(final String key);
 
 	/**
 	 * 获取byte[]
@@ -41,7 +41,7 @@ public interface RedisString {
 	 *            缓存的 key
 	 * @return
 	 */
-	byte[] GetBytes(String key);
+	byte[] GetBytes(final String key);
 
 	/**
 	 * @param key
@@ -50,7 +50,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	<T> boolean Set(String key, List<T> value);
+	<T> boolean Set(final String key, final List<T> value);
 
 	/**
 	 * @param key
@@ -61,7 +61,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> boolean Set(String key, List<T> value, int cacheMinutes);
+	<T> boolean Set(final String key, final List<T> value, final int cacheMinutes);
 
 	// Object
 	/**
@@ -71,7 +71,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	<T> boolean Set(String key, T value);
+	<T> boolean Set(final String key, final T value);
 
 	/**
 	 * @param key
@@ -82,7 +82,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	<T> boolean Set(String key, T value, int cacheMinutes);
+	<T> boolean Set(final String key, T value, final int cacheMinutes);
 
 	// String
 	/**
@@ -92,7 +92,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	boolean Set(String key, String value);
+	boolean Set(final String key, final String value);
 
 	/**
 	 * @param key
@@ -103,7 +103,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	boolean Set(String key, String value, int cacheMinutes);
+	boolean Set(final String key, final String value, final int cacheMinutes);
 
 	// byte[]
 	/**
@@ -113,7 +113,7 @@ public interface RedisString {
 	 *            要写入的值
 	 * @return
 	 */
-	boolean Set(String key, byte[] value);
+	boolean Set(final String key, final byte[] value);
 
 	/**
 	 * @param key
@@ -124,7 +124,7 @@ public interface RedisString {
 	 *            过期时间，单位：分钟
 	 * @return
 	 */
-	boolean Set(String key, byte[] value, int cacheMinutes);
+	boolean Set(final String key, final byte[] value, final int cacheMinutes);
 
 	// APPEND
 	// BITCOUNT

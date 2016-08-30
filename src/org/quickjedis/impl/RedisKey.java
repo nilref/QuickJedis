@@ -10,7 +10,7 @@ public interface RedisKey {
 	 *            过期时间，单位：秒
 	 * @return
 	 */
-	boolean Expire(String key, int seconds);
+	boolean Expire(final String key, final int seconds);
 
 	/**
 	 * 查看 key 的到期时间
@@ -19,7 +19,7 @@ public interface RedisKey {
 	 *            缓存的 key
 	 * @return
 	 */
-	long TTL(String key);
+	long TTL(final String key);
 
 	/**
 	 * 删除 key 以及对应的内容
@@ -28,7 +28,7 @@ public interface RedisKey {
 	 *            缓存的 key
 	 * @return
 	 */
-	long Del(String key);
+	long Del(final String key);
 	// DUMP
 	// EXISTS
 	// EXPIREAT

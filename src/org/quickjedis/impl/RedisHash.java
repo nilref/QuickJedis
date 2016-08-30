@@ -14,7 +14,7 @@ public interface RedisHash {
 	 *            要转换的类型
 	 * @return
 	 */
-	<T> T Hget(String key, String field, Class<T> className);
+	<T> T Hget(final String key, final String field, final Class<T> className);
 
 	/**
 	 * 获取 hash 表中对应字段的值
@@ -25,7 +25,18 @@ public interface RedisHash {
 	 *            hash 的字段名
 	 * @return
 	 */
-	byte[] HgetBytes(String key, String field);
+	String HgetString(final String key, final String field);
+
+	/**
+	 * 获取 hash 表中对应字段的值
+	 * 
+	 * @param key
+	 *            缓存的 key
+	 * @param field
+	 *            hash 的字段名
+	 * @return
+	 */
+	byte[] HgetBytes(final String key, final String field);
 
 	/**
 	 * 向 hash 表中写入值
@@ -38,7 +49,7 @@ public interface RedisHash {
 	 *            要写入的值
 	 * @return
 	 */
-	boolean Hset(String key, String field, String value);
+	boolean Hset(final String key, final String field, final String value);
 
 	/**
 	 * 向 hash 表中写入值
@@ -51,7 +62,7 @@ public interface RedisHash {
 	 *            要写入的值
 	 * @return
 	 */
-	boolean Hset(String key, String field, byte[] value);
+	boolean Hset(final String key, final String field, final byte[] value);
 
 	/**
 	 * 为哈希表 key 中的域 field 的值加上增量 increment
@@ -64,9 +75,8 @@ public interface RedisHash {
 	 *            需要增加的数值
 	 * @return
 	 */
-	long HincrBy(String key, String field, long increment);
+	long HincrBy(final String key, final String field, final long increment);
 	// HGETALL
-
 	// HINCRBYFLOAT
 	// HKEYS
 	// HLEN

@@ -1,7 +1,10 @@
 package org.quickjedis.core;
 
 import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
@@ -26,11 +29,11 @@ public class RedisCache extends Redis {
 				XmlHelper.GetNodeAttr(xmlNode, "db"), XmlHelper.GetNodeAttr(xmlNode, "encoding"));
 	}
 
-	public RedisCache(String name, String server, String db) {
+	public RedisCache(final String name, final String server, final String db) {
 		this(name, server, db, "UTF-8");
 	}
 
-	public RedisCache(String name, String server, String db, String encoding) {
+	public RedisCache(final String name, final String server, final String db, final String encoding) {
 		super(name);
 		// 设置DB
 		TryParseResult<Integer> tryRes = ConvertHelper.TryParseInt(db);
@@ -49,7 +52,7 @@ public class RedisCache extends Redis {
 		this.RedisClientPool = this.CreateManager(server);
 	}
 
-	private JedisPool CreateManager(String hosts) {
+	private JedisPool CreateManager(final String hosts) {
 
 		JedisPoolConfig config = new JedisPoolConfig();
 		// 控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取
@@ -85,7 +88,7 @@ public class RedisCache extends Redis {
 	 * @param str
 	 * @return
 	 */
-	private byte[] StringToBytes(String str) {
+	private byte[] StringToBytes(final String str) {
 		return ConvertHelper.StringToBytes(str, this.Encoding);
 	}
 
@@ -95,7 +98,7 @@ public class RedisCache extends Redis {
 	 * @param bytes
 	 * @return
 	 */
-	private String BytesToString(byte[] bytes) {
+	private String BytesToString(final byte[] bytes) {
 		return ConvertHelper.BytesToString(bytes, this.Encoding);
 	}
 
@@ -106,7 +109,7 @@ public class RedisCache extends Redis {
 	 *            需要转换的对象
 	 * @return
 	 */
-	private byte[] ObjectToBson(Object obj) {
+	private byte[] ObjectToBson(final Object obj) {
 		try {
 			return this.StringToBytes(JsonHelper.toJson(obj));
 		} catch (Exception e) {
@@ -124,7 +127,7 @@ public class RedisCache extends Redis {
 	 *            要转换的对象类型 MyClass.class
 	 * @return
 	 */
-	private <T> T BsonToObject(byte[] bytes, Class<T> className) {
+	private <T> T BsonToObject(final byte[] bytes, final Class<T> className) {
 		try {
 			return JsonHelper.toObject(this.BytesToString(bytes), className);
 		} catch (Exception e) {
@@ -134,7 +137,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public <T> List<T> GetList(String key, Class<T> className) {
+	public <T> List<T> GetList(final String key, final Class<T> className) {
 		try {
 			String jsonStr = this.GetString(key);
 			if (!StringHelper.IsNullOrEmpty(jsonStr))
@@ -148,7 +151,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public <T> T Get(String key, Class<T> className) {
+	public <T> T Get(final String key, final Class<T> className) {
 		try {
 			byte[] bytes = this.GetBytes(key);
 			if (bytes != null)
@@ -162,16 +165,16 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public String GetString(String key) {
+	public String GetString(final String key) {
 		byte[] bytes = this.GetBytes(key);
 		if (bytes != null)
 			return this.BytesToString(bytes);
 		else
-			return null;
+			return "";
 	}
 
 	@Override
-	public byte[] GetBytes(String key) {
+	public byte[] GetBytes(final String key) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -186,42 +189,42 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public <T> boolean Set(String key, List<T> ListObject) {
+	public <T> boolean Set(final String key, final List<T> ListObject) {
 		return this.Set(key, this.ObjectToBson(ListObject), -1);
 	}
 
 	@Override
-	public <T> boolean Set(String key, List<T> ListObject, int cacheMinutes) {
+	public <T> boolean Set(final String key, final List<T> ListObject, final int cacheMinutes) {
 		return this.Set(key, this.ObjectToBson(ListObject), cacheMinutes);
 	}
 
 	@Override
-	public <T> boolean Set(String key, T targetObject) {
+	public <T> boolean Set(final String key, final T targetObject) {
 		return this.Set(key, this.ObjectToBson(targetObject), -1);
 	}
 
 	@Override
-	public <T> boolean Set(String key, T targetObject, int cacheMinutes) {
+	public <T> boolean Set(final String key, final T targetObject, final int cacheMinutes) {
 		return this.Set(key, this.ObjectToBson(targetObject), cacheMinutes);
 	}
 
 	@Override
-	public boolean Set(String key, String text) {
+	public boolean Set(final String key, final String text) {
 		return this.Set(key, this.StringToBytes(text), -1);
 	}
 
 	@Override
-	public boolean Set(String key, String text, int cacheMinutes) {
+	public boolean Set(final String key, final String text, final int cacheMinutes) {
 		return this.Set(key, this.StringToBytes(text), cacheMinutes);
 	}
 
 	@Override
-	public boolean Set(String key, byte[] bytes) {
+	public boolean Set(final String key, byte[] bytes) {
 		return this.Set(key, bytes, -1);
 	}
 
 	@Override
-	public boolean Set(String key, byte[] bytes, int cacheMinutes) {
+	public boolean Set(final String key, byte[] bytes, final int cacheMinutes) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -241,7 +244,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public boolean Expire(String key, int seconds) {
+	public boolean Expire(final String key, final int seconds) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -257,7 +260,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public long TTL(String key) {
+	public long TTL(final String key) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -273,7 +276,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public long Del(String key) {
+	public long Del(final String key) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -289,7 +292,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public <T> T Hget(String key, String field, Class<T> className) {
+	public <T> T Hget(final String key, final String field, final Class<T> className) {
 		try {
 			byte[] bytes = this.HgetBytes(key, field);
 			if (bytes != null)
@@ -303,7 +306,17 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public byte[] HgetBytes(String key, String field) {
+	public String HgetString(final String key, final String field) {
+		try {
+			return this.BytesToString(this.HgetBytes(key, field));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "";
+		}
+	}
+
+	@Override
+	public byte[] HgetBytes(final String key, final String field) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -320,12 +333,12 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public boolean Hset(String key, String field, String value) {
+	public boolean Hset(final String key, final String field, final String value) {
 		return this.Hset(key, field, this.StringToBytes(value));
 	}
 
 	@Override
-	public boolean Hset(String key, String field, byte[] value) {
+	public boolean Hset(final String key, final String field, byte[] value) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -342,7 +355,7 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public long HincrBy(String key, String field, long increment) {
+	public long HincrBy(final String key, final String field, final long increment) {
 		Jedis redisClient = null;
 		try {
 			redisClient = this.GetResource();
@@ -359,205 +372,272 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public long LLen(String queueId) {
+	public <T> HashMap<Double, T> ZrangeWithScores(final String key, final long start, final long stop,
+			final Class<T> className) {
+		try {
+			Set<Tuple> sets = this.ZrangeWithScores(key, start, stop);
+			HashMap<Double, T> hashMap = new HashMap<Double, T>();
+			Object[] objs = sets.toArray();
+			for (Object obj : objs) {
+				Tuple tuple = (Tuple) obj;
+				hashMap.put(tuple.getScore(), this.BsonToObject(tuple.getBinaryElement(), className));
+			}
+			return hashMap;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public Set<Tuple> ZrangeWithScores(final String key, final long start, final long stop) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			return redisClient.zrangeWithScores(keyArray, start, stop);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (redisClient != null)
+				redisClient.close();
+		}
+		return null;
+	}
+
+	@Override
+	public <T> Set<T> Zrange(final String key, final long start, final long stop, final Class<T> className) {
+		try {
+			Set<byte[]> setBytes = this.Zrange(key, start, stop);
+			Set<T> sets = new HashSet<T>();
+			for (final byte[] bytes : setBytes) {
+				sets.add(this.BsonToObject(bytes, className));
+			}
+			return sets;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Set<byte[]> Zrange(final String key, final long start, final long stop) {
+		Jedis redisClient = null;
+		try {
+			redisClient = this.GetResource();
+			byte[] keyArray = this.StringToBytes(key);
+			return redisClient.zrange(keyArray, start, stop);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (redisClient != null)
+				redisClient.close();
+		}
+		return null;
+	}
+
+	@Override
+	public long LLen(final String queueId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long Push(String queueId, String value) {
+	public long Push(final String queueId, final String value) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public String Pop(String queueId) {
+	public String Pop(final String queueId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String LIndex(String listId, int listIndex) {
+	public String LIndex(final String listId, final int listIndex) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long SCARD(String setid) {
+	public long SCARD(final String setid) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long SADD(String setid, String member) {
+	public long SADD(final String setid, final String member) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long SREM(String setid, String member) {
+	public long SREM(final String setid, final String member) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public String SPOP(String setid) {
+	public String SPOP(final String setid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> SMEMBERS(String setid) {
+	public List<String> SMEMBERS(final String setid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long SISMEMBER(String setid, String member) {
+	public long SISMEMBER(final String setid, final String member) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void SMOVE(String setid, String toSetid, String member) {
+	public void SMOVE(final String setid, final String toSetid, final String member) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public long ZCARD(String setid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long ZADD(String setid, String member, int score) {
+	public long ZCARD(final String setid) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long ZREM(String setid, String member) {
+	public long ZADD(final String setid, final String member, final int score) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public double ZSCORE(String setid, String member) {
+	public long ZREM(final String setid, final String member) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public double ZINCRBY(String setid, String member, int increment) {
+	public double ZSCORE(final String setid, final String member) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public List<Tuple> ZRANGE(String setid, int start, int stop, boolean withScore) {
+	public double ZINCRBY(final String setid, final String member, final int increment) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Tuple> ZRANGE(final String setid, final int start, final int stop, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Tuple> ZREVRANGE(String setid, int start, int stop, boolean withScore) {
+	public List<Tuple> ZREVRANGE(final String setid, final int start, final int stop, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Tuple> ZRANGEBYSCORE(String setid, double min, double max, int skip, int take, boolean withScore) {
+	public List<Tuple> ZRANGEBYSCORE(final String setid, final double min, final double max, final int skip,
+			final int take, boolean withScore) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long ZREMRANGEBYRANK(String setid, int min, int max) {
+	public long ZREMRANGEBYRANK(final String setid, final int min, final int max) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long HIncrby(String hashId, String field, int incrementBy) {
+	public long HIncrby(final String hashId, final String field, final int incrementBy) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long HSet(String hashId, String field, String value) {
+	public long HSet(final String hashId, final String field, final String value) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void HMSet(String hashId, List<String> keyList, List<String> valueList) {
+	public void HMSet(final String hashId, final List<String> keyList, final List<String> valueList) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<String> HMGet(String hashId, List<String> keyList) {
+	public List<String> HMGet(final String hashId, final List<String> keyList) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String HGet(String hashId, String field) {
+	public String HGet(final String hashId, final String field) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> HGetValues(String hashId, List<String> keys) {
+	public List<String> HGetValues(final String hashId, final List<String> keys) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Dictionary<String, String> HGetAll(String hashId) {
+	public Dictionary<String, String> HGetAll(final String hashId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long HDel(String hashId, String field) {
+	public long HDel(final String hashId, final String field) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long HLen(String hashId) {
+	public long HLen(final String hashId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long Incr(String key) {
+	public long Incr(final String key) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long Decr(String key) {
+	public long Decr(final String key) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long Increment(String key, int amount) {
+	public long Increment(final String key, final int amount) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long Decrement(String key, int amount) {
+	public long Decrement(final String key, final int amount) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long IncrementValueInHash(String hashId, String key, int incrementBy) {
+	public long IncrementValueInHash(final String hashId, final String key, final int incrementBy) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -575,19 +655,19 @@ public class RedisCache extends Redis {
 	}
 
 	@Override
-	public List<String> SearchKeys(String pattern) {
+	public List<String> SearchKeys(final String pattern) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean Exists(String key) {
+	public boolean Exists(final String key) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean Remove(String key) {
+	public boolean Remove(final String key) {
 		// TODO Auto-generated method stub
 		return false;
 	}
