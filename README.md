@@ -3,7 +3,7 @@ Quick start using jedis
 
 快速上手Jedis，更多的关注业务开发
 
->在 src 下添加配置文件 QjedisConfig.xml
+>在 src 下添加配置文件 quick-jedis-config.xml
 
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
