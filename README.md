@@ -7,7 +7,7 @@ Quick start using jedis
 
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
-<redis-root>
+<redis-root is-log="true" throw-exception="false" inner-log-path="/home/quick-jedis-log/">
     <redis-node name="HelloRedis" server="127.0.0.1:6379" db="2" encoding="UTF-8" />
     <redis-node name="TestRedis" server="127.0.0.1:6379" db="0" encoding="GBK" />
     ...
