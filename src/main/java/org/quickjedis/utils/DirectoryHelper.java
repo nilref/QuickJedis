@@ -4,6 +4,9 @@ import java.io.File;
 
 public class DirectoryHelper {
 
+	public static final String FilePathSplit = EnvironmentHelper.GetOSName().startsWith("Unix")
+			|| EnvironmentHelper.GetOSName().startsWith("Linux") ? "/" : "\\";
+
 	public static Boolean Exists(String path) {
 		File file = new File(path);
 		return file.exists() || file.isDirectory();

@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.log4j.Logger;
 import org.quickjedis.utils.DateHelper;
 import org.quickjedis.utils.DirectoryHelper;
 import org.quickjedis.utils.EnvironmentHelper;
@@ -17,7 +18,6 @@ import org.quickjedis.utils.StringHelper;
 
 public class InnerLogger {
 	private static Lock lock = new ReentrantLock();
-	static String FilePathSplit = EnvironmentHelper.GetOSVersion().startsWith("Unix") ? "/" : "\\";
 	public static String InnerLogPath;
 	static String FileName;
 
@@ -45,11 +45,14 @@ public class InnerLogger {
 		InnerLogger.WriteLog("Fatal", CustomerInfo);
 	}
 
+	static Logger logger = Logger.getLogger(InnerLogger.class);
+
 	private static void WriteLog(String level, String customerInfo) {
 		if (!StringHelper.IsNullOrEmpty(InnerLogger.InnerLogPath)) {
-			InnerLogger.FileName = !InnerLogger.InnerLogPath.endsWith(InnerLogger.FilePathSplit)
-					? InnerLogger.InnerLogPath + InnerLogger.FilePathSplit + "Qjedis.log"
-					: InnerLogger.InnerLogPath + "Qjedis.log";
+			InnerLogger.FileName = !InnerLogger.InnerLogPath.endsWith(DirectoryHelper.FilePathSplit)
+					? InnerLogger.InnerLogPath + DirectoryHelper.FilePathSplit + "quickjedis.log"
+					: InnerLogger.InnerLogPath + "quickjedis.log";
+
 			try {
 				File file = new File(InnerLogger.FileName);
 				if (!DirectoryHelper.Exists(InnerLogger.InnerLogPath))

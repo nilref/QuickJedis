@@ -12,12 +12,12 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.quickjedis.core.InnerLogger;
 import org.quickjedis.core.Unity;
 import org.quickjedis.core.XmlHelper;
+import org.quickjedis.utils.DirectoryHelper;
 import org.quickjedis.utils.FileHelper;
 import org.quickjedis.utils.StringHelper;
 import org.w3c.dom.Node;
 
 public class ConfigManager {
-
 	private static FileAlterationObserver Observer;
 
 	public static XmlCachingConfig CurrentConfig;
@@ -26,9 +26,10 @@ public class ConfigManager {
 
 		XmlCachingConfig xmlCachingConfig = new XmlCachingConfig();
 
-		String filename = "QjedisConfig.xml";
+		String filename = "quick-jedis-config.xml";
 		String classesPath = FileHelper.GetClassesPath();
-		final String str = Paths.get(classesPath, filename).toString();
+		final String str = (DirectoryHelper.FilePathSplit.startsWith("/") ? "/" : "")
+				+ Paths.get(classesPath, filename).toString();
 		Node configNode = null;
 		if (FileHelper.Exists(str)) {
 			configNode = XmlHelper.GetXmlNodeFromFile(str, "redis-root");

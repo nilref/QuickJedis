@@ -14,9 +14,9 @@ public class EnvironmentHelper {
 		}
 	}
 
-	public static String GetOSVersion() {
+	public static String GetOSName() {
 		// 系统属性
-		return System.getProperty("os.version");
+		return System.getProperty("os.name");
 	}
 
 	public static String GetDefaultEncoding() {
