@@ -37,7 +37,7 @@ public class RedisDefined {
 }
 ```
 
-####操作字符串
+#### 操作字符串
 ``` java
 
 // 写入
@@ -46,7 +46,7 @@ boolean res = RedisDefined.TestRedis.Set(key, jsonStr);
 String jsonStrTmp = RedisDefined.TestRedis.GetString(key);
 ```
 
-####操作byte[]
+#### 操作byte[]
 ``` java
 // 写入
 boolean bl = RedisDefined.TestRedis.Set(key, bytes);
@@ -54,7 +54,7 @@ boolean bl = RedisDefined.TestRedis.Set(key, bytes);
 byte[] infoBytes = RedisDefined.TestRedis.GetBytes(key);
 ```
 
-####操作Object
+#### 操作Object
 ``` java
 // 写入
 Info info = new Info();
@@ -64,7 +64,7 @@ Info infoTmp = RedisDefined.TestRedis.Get(key, Info.class);
 ```
 
 
-####操作List<T>
+#### 操作List<T>
 ``` java
 // 写入
 List<Info> infoLst = new ArrayList<Info>();
