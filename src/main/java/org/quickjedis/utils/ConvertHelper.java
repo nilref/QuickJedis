@@ -11,53 +11,53 @@ public class ConvertHelper {
 	@SuppressWarnings("unchecked")
 	public static <T> T GetDefaultVal(Class<T> className) {
 		if (Integer.class.equals(className) || int.class.equals(className))
-			return (T) GetDefaultVal(Integer.class);
+			return (T) GetIntegerDefaultVal(Integer.class);
 		if (Long.class.equals(className) || long.class.equals(className))
-			return (T) GetDefaultVal(Long.class);
+			return (T) GetLongDefaultVal(Long.class);
 		if (Byte.class.equals(className) || byte.class.equals(className))
-			return (T) GetDefaultVal(Byte.class);
+			return (T) GetByteDefaultVal(Byte.class);
 		if (Short.class.equals(className) || short.class.equals(className))
-			return (T) GetDefaultVal(Short.class);
+			return (T) GetShortDefaultVal(Short.class);
 		if (Float.class.equals(className) || float.class.equals(className))
-			return (T) GetDefaultVal(Float.class);
+			return (T) GetFloatDefaultVal(Float.class);
 		if (Double.class.equals(className) || double.class.equals(className))
-			return (T) GetDefaultVal(Double.class);
+			return (T) GetDoubleDefaultVal(Double.class);
 		if (Character.class.equals(className) || char.class.equals(className))
-			return (T) GetDefaultVal(Character.class);
+			return (T) GetCharacterDefaultVal(Character.class);
 		if (Boolean.class.equals(className) || boolean.class.equals(className))
-			return (T) GetDefaultVal(Boolean.class);
+			return (T) GetBooleanDefaultVal(Boolean.class);
 		return (T) null;
 	}
 
-	public static Integer GetDefaultVal(Class<Integer> className) {
+	public static Integer GetIntegerDefaultVal(Class<Integer> className) {
 		return 0;
 	}
 
-	public static Long GetDefaultVal(Class<Long> className) {
+	public static Long GetLongDefaultVal(Class<Long> className) {
 		return (long) 0;
 	}
 
-	public static Byte GetDefaultVal(Class<Byte> className) {
+	public static Byte GetByteDefaultVal(Class<Byte> className) {
 		return 0;
 	}
 
-	public static Short GetDefaultVal(Class<Short> className) {
+	public static Short GetShortDefaultVal(Class<Short> className) {
 		return 0;
 	}
 
-	public static Float GetDefaultVal(Class<Float> className) {
+	public static Float GetFloatDefaultVal(Class<Float> className) {
 		return (float) 0;
 	}
 
-	public static Double GetDefaultVal(Class<Double> className) {
+	public static Double GetDoubleDefaultVal(Class<Double> className) {
 		return (double) 0;
 	}
 
-	public static Character GetDefaultVal(Class<Character> className) {
+	public static Character GetCharacterDefaultVal(Class<Character> className) {
 		return '\u0000';
 	}
 
-	public static Boolean GetDefaultVal(Class<Boolean> className) {
+	public static Boolean GetBooleanDefaultVal(Class<Boolean> className) {
 		return false;
 	}
 
