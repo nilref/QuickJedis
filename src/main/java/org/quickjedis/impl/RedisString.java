@@ -134,7 +134,7 @@ public interface RedisString {
 	// GETBIT
 	// GETRANGE
 	// GETSET
-	// INCR
+	long Incr(final String key);
 	// INCRBY
 	// INCRBYFLOAT
 	// MGET

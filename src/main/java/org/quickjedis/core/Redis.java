@@ -166,7 +166,8 @@ public abstract class Redis extends CacheBase
 
 	abstract long HLen(final String hashId);
 
-	abstract long Incr(final String key);
+	@Override
+	public abstract long Incr(final String key);
 
 	abstract long Decr(final String key);
 

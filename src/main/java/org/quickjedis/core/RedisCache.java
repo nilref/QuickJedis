@@ -623,9 +623,25 @@ public class RedisCache extends Redis {
         return 0;
     }
 
+    /**
+     * Incr 命令将 key 中储存的数字值增一
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作
+     * 本操作的值限制在 64 位(bit)有符号数字表示之内
+     * @param key
+     * @return
+     */
     @Override
     public long Incr(final String key) {
-        // TODO Auto-generated method stub
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            return redisClient.incr(key);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
