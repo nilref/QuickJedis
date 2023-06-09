@@ -449,14 +449,6 @@ public class RedisCache extends Redis {
         return 0;
     }
 
-    /**
-     * 将一个值插入到列表头部
-     *
-     * @param queueId
-     * @param value
-     * @param <T>
-     * @return
-     */
     @Override
     public <T> long LPush(final String queueId, final T value) {
         Jedis redisClient = null;
