@@ -1,10 +1,6 @@
 package org.quickjedis.core;
 
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
@@ -51,10 +47,9 @@ public class RedisCache extends Redis {
             this.DataBase = 0;
 
         // 设置密码
-        if (StringHelper.IsNullOrEmpty(pwd)){
+        if (StringHelper.IsNullOrEmpty(pwd)) {
             this.password = null;
-        }
-        else{
+        } else {
             this.password = pwd;
         }
 
@@ -454,16 +449,70 @@ public class RedisCache extends Redis {
         return 0;
     }
 
+    /**
+     * 将一个值插入到列表头部
+     *
+     * @param queueId
+     * @param value
+     * @param <T>
+     * @return
+     */
     @Override
-    public long Push(final String queueId, final String value) {
-        // TODO Auto-generated method stub
+    public <T> long LPush(final String queueId, final T value) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            return redisClient.lpush(keyArray, this.ObjectToBson(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
     @Override
-    public String Pop(final String queueId) {
-        // TODO Auto-generated method stub
-        return null;
+    public <T> long LPush(final String queueId, final T... valueArray) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (T value : valueArray) {
+                valueList.add(this.ObjectToBson(value));
+            }
+            return redisClient.lpush(keyArray, valueList.toArray(new byte[0][]));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
+    public <T> T RPop(final String queueId, final Class<T> className) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            byte[] bytes =  redisClient.rpop(keyArray);
+            if (bytes != null) {
+                return this.BsonToObject(bytes, className);
+            }
+            else {
+                return ConvertHelper.GetDefaultVal(className);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return ConvertHelper.GetDefaultVal(className);
     }
 
     @Override
@@ -627,6 +676,7 @@ public class RedisCache extends Redis {
      * Incr 命令将 key 中储存的数字值增一
      * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作
      * 本操作的值限制在 64 位(bit)有符号数字表示之内
+     *
      * @param key
      * @return
      */
