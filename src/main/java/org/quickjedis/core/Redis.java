@@ -123,6 +123,25 @@ public abstract class Redis extends CacheBase
     public abstract <T> long LPush(final String queueId, final T... value);
 
     /**
+     * 将一个值插入到列表尾部
+     * @param queueId
+     * @param value
+     * @param <T>
+     * @return
+     */
+    @Override
+    public abstract <T> long RPush(final String queueId, final T value);
+    /**
+     * 将多个值插入到列表尾部
+     * @param queueId
+     * @param value
+     * @param <T>
+     * @return
+     */
+    @Override
+    public abstract <T> long RPush(final String queueId, final T... value);
+
+    /**
      * 从列表的尾部取出一个值
      * @param queueId
      * @param className

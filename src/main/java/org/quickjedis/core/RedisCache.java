@@ -486,6 +486,42 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public <T> long RPush(final String queueId, final T value) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            return redisClient.rpush(keyArray, this.ObjectToBson(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
+    public <T> long RPush(final String queueId, final T... valueArray) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (T value : valueArray) {
+                valueList.add(this.ObjectToBson(value));
+            }
+            return redisClient.rpush(keyArray, valueList.toArray(new byte[0][]));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
     public <T> T RPop(final String queueId, final Class<T> className) {
         Jedis redisClient = null;
         try {

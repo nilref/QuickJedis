@@ -10,6 +10,8 @@ public interface RedisList {
     // LPOP
     <T> long LPush(final String queueId, final T value);
     <T> long LPush(final String queueId, final T... value);
+    <T> long RPush(final String queueId, final T value);
+    <T> long RPush(final String queueId, final T... value);
     // LPUSHX
     // LRANGE
     // LREM
