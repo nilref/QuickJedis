@@ -6,7 +6,7 @@ public interface RedisList {
     // BRPOPLPUSH
     // LINDEX
     // LINSERT
-    // LLEN
+    long LLen(final String queueId);
     // LPOP
     <T> long LPush(final String queueId, final T value);
     <T> long LPush(final String queueId, final T... value);

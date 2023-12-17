@@ -22,11 +22,18 @@ public class ListTest extends MyTest {
     }
 
     @Test
-    public void testRPush(){
+    public void testRPush() {
         System.out.println("testRPush");
         long ret = RedisDefined.TestRedis.RPush("list-test-1", 999);
         int num1 = RedisDefined.TestRedis.RPop("list-test-1", Integer.class);
         Assert.assertEquals(999, num1);
+    }
+
+    @Test
+    public void testLLen() {
+        System.out.println("testLLen");
+        long ret = RedisDefined.TestRedis.LLen("list-test-1");
+        Assert.assertEquals(4,ret);
     }
 
     @Test

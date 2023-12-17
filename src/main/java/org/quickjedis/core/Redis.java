@@ -100,8 +100,8 @@ public abstract class Redis extends CacheBase
 
     // T Get<T>(final String key, Func<T> initItemFunc, final int cacheMinutes =
     // 0);
-
-    abstract long LLen(final String queueId);
+    @Override
+    public abstract long LLen(final String queueId);
 
     /**
      * 将一个值插入到列表头部

@@ -445,8 +445,17 @@ public class RedisCache extends Redis {
 
     @Override
     public long LLen(final String queueId) {
-        // TODO Auto-generated method stub
-        return 0;
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            return redisClient.llen(queueId);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return -1;
     }
 
     @Override
@@ -527,11 +536,10 @@ public class RedisCache extends Redis {
         try {
             redisClient = this.GetResource();
             byte[] keyArray = this.StringToBytes(queueId);
-            byte[] bytes =  redisClient.rpop(keyArray);
+            byte[] bytes = redisClient.rpop(keyArray);
             if (bytes != null) {
                 return this.BsonToObject(bytes, className);
-            }
-            else {
+            } else {
                 return ConvertHelper.GetDefaultVal(className);
             }
         } catch (Exception ex) {
