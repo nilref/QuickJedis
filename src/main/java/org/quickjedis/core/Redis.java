@@ -65,23 +65,32 @@ public abstract class Redis extends CacheBase
     @Override
     public abstract long Del(final String key);
 
-    @Override
-    public abstract <T> T Hget(final String key, final String field, final Class<T> className);
+    abstract List<String> HGetValues(final String hashId, final List<String> keys);
+
+    abstract Dictionary<String, String> HGetAll(final String hashId);
 
     @Override
-    public abstract String HgetString(final String key, final String field);
+    public abstract <T> T HGet(final String hashId, final String field, final Class<T> className);
 
     @Override
-    public abstract byte[] HgetBytes(final String key, final String field);
+    public abstract String HGet(final String hashId, final String field);
 
     @Override
-    public abstract boolean Hset(final String key, final String field, final byte[] value);
+    public abstract long HSet(final String key, final String field, final byte[] value);
 
     @Override
-    public abstract boolean Hset(final String key, final String field, final String value);
+    public abstract <T> long HSet(final String hashId, final String field, final T value);
 
     @Override
-    public abstract long HincrBy(final String key, final String field, final long increment);
+    public abstract long HIncrBy(final String key, final String field, final long increment);
+
+    abstract void HMSet(final String hashId, final List<String> keyList, final List<String> valueList);
+
+    abstract List<String> HMGet(final String hashId, final List<String> keyList);
+
+    abstract long HDel(final String hashId, final String field);
+
+    abstract long HLen(final String hashId);
 
     @Override
     public abstract Set<Tuple> ZrangeWithScores(final String key, final long start, final long stop);
@@ -235,24 +244,6 @@ public abstract class Redis extends CacheBase
                                        boolean withScore);
 
     abstract long ZREMRANGEBYRANK(final String setid, final int min, final int max);
-
-    abstract long HIncrby(final String hashId, final String field, final int incrementBy);
-
-    abstract long HSet(final String hashId, final String field, final String value);
-
-    abstract void HMSet(final String hashId, final List<String> keyList, final List<String> valueList);
-
-    abstract List<String> HMGet(final String hashId, final List<String> keyList);
-
-    abstract String HGet(final String hashId, final String field);
-
-    abstract List<String> HGetValues(final String hashId, final List<String> keys);
-
-    abstract Dictionary<String, String> HGetAll(final String hashId);
-
-    abstract long HDel(final String hashId, final String field);
-
-    abstract long HLen(final String hashId);
 
     @Override
     public abstract long Incr(final String key);

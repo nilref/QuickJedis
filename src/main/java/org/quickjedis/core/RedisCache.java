@@ -298,9 +298,9 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public <T> T Hget(final String key, final String field, final Class<T> className) {
+    public <T> T HGet(final String key, final String field, final Class<T> className) {
         try {
-            byte[] bytes = this.HgetBytes(key, field);
+            byte[] bytes = this.hGetBytes(key, field);
             if (bytes != null)
                 return this.BsonToObject(bytes, className);
             else
@@ -312,17 +312,16 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public String HgetString(final String key, final String field) {
+    public String HGet(final String key, final String field) {
         try {
-            return this.BytesToString(this.HgetBytes(key, field));
+            return this.BytesToString(this.hGetBytes(key, field));
         } catch (Exception ex) {
             ex.printStackTrace();
             return "";
         }
     }
 
-    @Override
-    public byte[] HgetBytes(final String key, final String field) {
+    private byte[] hGetBytes(final String key, final String field) {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
@@ -339,29 +338,29 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public boolean Hset(final String key, final String field, final String value) {
-        return this.Hset(key, field, this.StringToBytes(value));
+    public <T> long HSet(final String key, final String field, final T value) {
+        return this.HSet(key, field, this.ObjectToBson(value));
     }
 
     @Override
-    public boolean Hset(final String key, final String field, byte[] value) {
+    public long HSet(final String key, final String field, byte[] value) {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
             byte[] keyArray = this.StringToBytes(key);
             byte[] fieldArray = this.StringToBytes(field);
-            return RedisResult.SUCCESS.equals(redisClient.hset(keyArray, fieldArray, value));
+            return redisClient.hset(keyArray, fieldArray, value);
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return false;
+        return 0;
     }
 
     @Override
-    public long HincrBy(final String key, final String field, final long increment) {
+    public long HIncrBy(final String key, final String field, final long increment) {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
@@ -374,6 +373,43 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
+        return 0;
+    }
+
+
+    @Override
+    public void HMSet(final String hashId, final List<String> keyList, final List<String> valueList) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public List<String> HMGet(final String hashId, final List<String> keyList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> HGetValues(final String hashId, final List<String> keys) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Dictionary<String, String> HGetAll(final String hashId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long HDel(final String hashId, final String field) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public long HLen(final String hashId) {
+        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -738,59 +774,6 @@ public class RedisCache extends Redis {
         return 0;
     }
 
-    @Override
-    public long HIncrby(final String hashId, final String field, final int incrementBy) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public long HSet(final String hashId, final String field, final String value) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void HMSet(final String hashId, final List<String> keyList, final List<String> valueList) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public List<String> HMGet(final String hashId, final List<String> keyList) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String HGet(final String hashId, final String field) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<String> HGetValues(final String hashId, final List<String> keys) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Dictionary<String, String> HGetAll(final String hashId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public long HDel(final String hashId, final String field) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public long HLen(final String hashId) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
     /**
      * Incr 命令将 key 中储存的数字值增一
