@@ -455,7 +455,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -559,13 +559,36 @@ public class RedisCache extends Redis {
 
     @Override
     public long SCARD(final String setid) {
-        // TODO Auto-generated method stub
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            return redisClient.scard(setid);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
     @Override
-    public long SADD(final String setid, final String member) {
-        // TODO Auto-generated method stub
+    public <T> long SADD(final String setid, final T... member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (T value : member) {
+                valueList.add(this.ObjectToBson(value));
+            }
+            return redisClient.sadd(keyArray, valueList.toArray(new byte[0][]));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
@@ -576,14 +599,75 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public String SPOP(final String setid) {
-        // TODO Auto-generated method stub
+    public <T> T SPOP(final String setid, final Class<T> className) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            byte[] bytes = redisClient.spop(keyArray);
+            if (bytes != null) {
+                return this.BsonToObject(bytes, className);
+            } else {
+                return ConvertHelper.GetDefaultVal(className);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return ConvertHelper.GetDefaultVal(className);
+    }
+
+    @Override
+    public <T> List<T> SMEMBERS(final String setid, final Class<T> className) {
+        List<T> list = new ArrayList<T>();
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            Set<byte[]> set = redisClient.smembers(keyArray);
+            if (set != null) {
+                for (byte[] bytes : set) {
+                    list.add(this.BsonToObject(bytes, className));
+                }
+                return list;
+            } else {
+                return list;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return null;
     }
 
     @Override
-    public List<String> SMEMBERS(final String setid) {
-        // TODO Auto-generated method stub
+    public <T> List<T> SRANDMEMBER(final String setid, int count, final Class<T> className) {
+        List<T> list = new ArrayList<T>();
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            List<byte[]> set = redisClient.srandmember(keyArray, count);
+            if (set != null) {
+                for (byte[] bytes : set) {
+                    list.add(this.BsonToObject(bytes, className));
+                }
+                return list;
+            } else {
+                return list;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return null;
     }
 

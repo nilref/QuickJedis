@@ -105,6 +105,7 @@ public abstract class Redis extends CacheBase
 
     /**
      * 将一个值插入到列表头部
+     *
      * @param queueId
      * @param value
      * @param <T>
@@ -112,8 +113,10 @@ public abstract class Redis extends CacheBase
      */
     @Override
     public abstract <T> long LPush(final String queueId, final T value);
+
     /**
      * 将多个值插入到列表头部
+     *
      * @param queueId
      * @param value
      * @param <T>
@@ -124,6 +127,7 @@ public abstract class Redis extends CacheBase
 
     /**
      * 将一个值插入到列表尾部
+     *
      * @param queueId
      * @param value
      * @param <T>
@@ -131,8 +135,10 @@ public abstract class Redis extends CacheBase
      */
     @Override
     public abstract <T> long RPush(final String queueId, final T value);
+
     /**
      * 将多个值插入到列表尾部
+     *
      * @param queueId
      * @param value
      * @param <T>
@@ -143,6 +149,7 @@ public abstract class Redis extends CacheBase
 
     /**
      * 从列表的尾部取出一个值
+     *
      * @param queueId
      * @param className
      * @param <T>
@@ -155,15 +162,56 @@ public abstract class Redis extends CacheBase
 
     abstract boolean Remove(final String key);
 
-    abstract long SCARD(final String setid);
 
-    abstract long SADD(final String setid, final String member);
+    /**
+     * 将一个或多个元素添加到集合中
+     *
+     * @param setid
+     * @param member
+     * @return
+     */
+    @Override
+    public abstract <T> long SADD(final String setid, final T... member);
 
     abstract long SREM(final String setid, final String member);
 
-    abstract String SPOP(final String setid);
+    /**
+     * 获取集合中元素的数量
+     *
+     * @param setid
+     * @return
+     */
+    @Override
+    public abstract long SCARD(final String setid);
 
-    abstract List<String> SMEMBERS(final String setid);
+    /**
+     * 从集合中随机移除并返回一个或多个元素
+     *
+     * @param setid
+     * @return
+     */
+    @Override
+    public abstract <T> T SPOP(final String setid, final Class<T> className);
+
+    /**
+     * 获取集合中的所有元素
+     *
+     * @param setid
+     * @return
+     */
+    @Override
+    public abstract <T> List<T> SMEMBERS(final String setid, final Class<T> className);
+
+    /**
+     * 从集合中随机返回一个或多个元素，但并不会从集合中删除这些元素
+     * @param setid
+     * @param count （可选）要返回的元素数量。如果未指定，默认返回一个元素。
+     * @param className
+     * @param <T>
+     * @return
+     */
+    @Override
+    public abstract <T> List<T> SRANDMEMBER(final String setid,int count, final Class<T> className);
 
     abstract long SISMEMBER(final String setid, final String member);
 
