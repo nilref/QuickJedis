@@ -41,19 +41,6 @@ public interface RedisHash {
 	<T> long HSet(final String hashId, final String field, final T value);
 
 	/**
-	 * 向 hash 表中写入值
-	 * 
-	 * @param hashId
-	 *            缓存的 hashId
-	 * @param field
-	 *            hash 的字段名
-	 * @param value
-	 *            要写入的值
-	 * @return
-	 */
-	long HSet(final String hashId, final String field, final byte[] value);
-
-	/**
 	 * 为哈希表 key 中的域 field 的值加上增量 increment
 	 * 
 	 * @param hashId

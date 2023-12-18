@@ -14,6 +14,8 @@ import org.quickjedis.impl.RedisString;
 
 import redis.clients.jedis.Tuple;
 
+import javax.xml.bind.annotation.XmlValue;
+
 public abstract class Redis extends CacheBase
         implements RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisSortedSet {
     public Redis(final String name) {
@@ -76,9 +78,6 @@ public abstract class Redis extends CacheBase
     public abstract String HGet(final String hashId, final String field);
 
     @Override
-    public abstract long HSet(final String key, final String field, final byte[] value);
-
-    @Override
     public abstract <T> long HSet(final String hashId, final String field, final T value);
 
     @Override
@@ -91,19 +90,6 @@ public abstract class Redis extends CacheBase
     abstract long HDel(final String hashId, final String field);
 
     abstract long HLen(final String hashId);
-
-    @Override
-    public abstract Set<Tuple> ZrangeWithScores(final String key, final long start, final long stop);
-
-    @Override
-    public abstract <T> Set<T> Zrange(final String key, final long start, final long stop, final Class<T> className);
-
-    @Override
-    public abstract Set<byte[]> Zrange(final String key, final long start, final long stop);
-
-    @Override
-    public abstract <T> HashMap<Double, T> ZrangeWithScores(final String key, final long start, final long stop,
-                                                            final Class<T> className);
 
     abstract boolean Exists(final String key);
 
@@ -172,63 +158,51 @@ public abstract class Redis extends CacheBase
     abstract boolean Remove(final String key);
 
 
-    /**
-     * 将一个或多个元素添加到集合中
-     *
-     * @param setid
-     * @param member
-     * @return
-     */
+
     @Override
-    public abstract <T> long SADD(final String setid, final T... member);
+    public abstract <T> long SAdd(final String setid, final T... member);
 
     abstract long SREM(final String setid, final String member);
 
-    /**
-     * 获取集合中元素的数量
-     *
-     * @param setid
-     * @return
-     */
-    @Override
-    public abstract long SCARD(final String setid);
 
-    /**
-     * 从集合中随机移除并返回一个或多个元素
-     *
-     * @param setid
-     * @return
-     */
     @Override
-    public abstract <T> T SPOP(final String setid, final Class<T> className);
+    public abstract long SCard(final String setid);
 
-    /**
-     * 获取集合中的所有元素
-     *
-     * @param setid
-     * @return
-     */
     @Override
-    public abstract <T> List<T> SMEMBERS(final String setid, final Class<T> className);
+    public abstract <T> T SPop(final String setid, final Class<T> className);
 
-    /**
-     * 从集合中随机返回一个或多个元素，但并不会从集合中删除这些元素
-     * @param setid
-     * @param count （可选）要返回的元素数量。如果未指定，默认返回一个元素。
-     * @param className
-     * @param <T>
-     * @return
-     */
     @Override
-    public abstract <T> List<T> SRANDMEMBER(final String setid,int count, final Class<T> className);
+    public abstract <T> List<T> SMembers(final String setid, final Class<T> className);
+
+    @Override
+    public abstract <T> List<T> SRandMember(final String setid, int count, final Class<T> className);
 
     abstract long SISMEMBER(final String setid, final String member);
 
     abstract void SMOVE(final String setid, final String toSetid, final String member);
 
-    abstract long ZCARD(final String setid);
+    @Override
+    public abstract long ZCard(final String setid);
 
-    abstract long ZADD(final String setid, final String member, final int score);
+    @Override
+    public abstract long ZCount(final String setid, final double min, final double max);
+
+    @Override
+    public abstract <T> long ZAdd(final String setid, final T member, final double score);
+
+    @Override
+    public abstract <T> HashMap<T, Double> ZRangeByScoreWithScores(final String key, final double min, final double max,
+                                                   final Class<T> className);
+
+    @Override
+    public abstract <T> Set<T> ZRangeByScore(final String key, final double min, final double max, final Class<T> className);
+
+    @Override
+    public abstract <T> HashMap<T, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min,
+                                                      final Class<T> className);
+
+    @Override
+    public abstract <T> Set<T> ZRevRangeByScore(final String setid, final double max, final double min, final Class<T> className);
 
     abstract long ZREM(final String setid, final String member);
 
@@ -236,12 +210,19 @@ public abstract class Redis extends CacheBase
 
     abstract double ZINCRBY(final String setid, final String member, final int increment);
 
-    abstract List<Tuple> ZRANGE(final String setid, final int start, final int stop, boolean withScore);
+    @Override
+    public abstract <T> Set<T> ZRange(final String key, final long start, final long stop, final Class<T> className);
 
-    abstract List<Tuple> ZREVRANGE(final String setid, final int start, final int stop, boolean withScore);
+    @Override
+    public abstract <T> HashMap<T, Double> ZRangeWithScores(final String key, final long start, final long stop,
+                                                            final Class<T> className);
 
-    abstract List<Tuple> ZRANGEBYSCORE(final String setid, double min, double max, final int skip, final int take,
-                                       boolean withScore);
+    @Override
+    public abstract <T> HashMap<T, Double> ZRevRangeWithScores(final String setid, final long start, final long stop,
+                                                               final Class<T> className);
+
+    @Override
+    public abstract <T> Set<T> ZRevRange(final String setid, final long start, final long stop, final Class<T> className);
 
     abstract long ZREMRANGEBYRANK(final String setid, final int min, final int max);
 

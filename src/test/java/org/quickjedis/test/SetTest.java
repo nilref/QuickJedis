@@ -15,37 +15,37 @@ public class SetTest extends MyTest {
         String key = "TEST.SETSTRING";
 
         String jsonStr = JsonHelper.toJson(userInfo);
-        long res = RedisDefined.TestRedis.SADD(key, jsonStr);
+        long res = RedisDefined.TestRedis.SAdd(key, jsonStr);
         Assert.assertEquals(res, 1);
 
-        long SCARD = RedisDefined.TestRedis.SCARD(key);
+        long SCARD = RedisDefined.TestRedis.SCard(key);
         Assert.assertEquals(SCARD, 1);
 
-        long res1 = RedisDefined.TestRedis.SADD(key, jsonStr);
+        long res1 = RedisDefined.TestRedis.SAdd(key, jsonStr);
         Assert.assertEquals(res1, 0);
 
         userInfo.setAge(userInfo.getAge() + 1);
         String jsonStr1 = JsonHelper.toJson(userInfo);
-        long res2 = RedisDefined.TestRedis.SADD(key, jsonStr1);
+        long res2 = RedisDefined.TestRedis.SAdd(key, jsonStr1);
         Assert.assertEquals(res2, 1);
 
-        List<String> list = RedisDefined.TestRedis.SMEMBERS(key, String.class);
+        List<String> list = RedisDefined.TestRedis.SMembers(key, String.class);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        List<String> list1 = RedisDefined.TestRedis.SRANDMEMBER(key, 1, String.class);
+        List<String> list1 = RedisDefined.TestRedis.SRandMember(key, 1, String.class);
         Assert.assertNotNull(list1);
         Assert.assertEquals(list1.size(), 1);
 
-        long SCARD1 = RedisDefined.TestRedis.SCARD(key);
+        long SCARD1 = RedisDefined.TestRedis.SCard(key);
         for (int i = 0; i < SCARD1; i++) {
-            String ret = RedisDefined.TestRedis.SPOP(key, String.class);
+            String ret = RedisDefined.TestRedis.SPop(key, String.class);
             UserInfo userInfoTmp = JsonHelper.toObject(ret, UserInfo.class);
             System.out.println("age: " + userInfoTmp.getAge());
             Assert.assertNotNull(userInfoTmp);
         }
 
-        long SCARD2 = RedisDefined.TestRedis.SCARD(key);
+        long SCARD2 = RedisDefined.TestRedis.SCard(key);
         Assert.assertEquals(SCARD2, 0);
     }
 
@@ -55,35 +55,35 @@ public class SetTest extends MyTest {
 
         String key = "TEST.SETOBJECT";
 
-        long res = RedisDefined.TestRedis.SADD(key, userInfo);
+        long res = RedisDefined.TestRedis.SAdd(key, userInfo);
         Assert.assertEquals(res, 1);
 
-        long SCARD = RedisDefined.TestRedis.SCARD(key);
+        long SCARD = RedisDefined.TestRedis.SCard(key);
         Assert.assertEquals(SCARD, 1);
 
-        long res1 = RedisDefined.TestRedis.SADD(key, userInfo);
+        long res1 = RedisDefined.TestRedis.SAdd(key, userInfo);
         Assert.assertEquals(res1, 0);
 
         userInfo.setAge(userInfo.getAge() + 1);
-        long res2 = RedisDefined.TestRedis.SADD(key, userInfo);
+        long res2 = RedisDefined.TestRedis.SAdd(key, userInfo);
         Assert.assertEquals(res2, 1);
 
-        List<UserInfo> list = RedisDefined.TestRedis.SMEMBERS(key, UserInfo.class);
+        List<UserInfo> list = RedisDefined.TestRedis.SMembers(key, UserInfo.class);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        List<UserInfo> list1 = RedisDefined.TestRedis.SRANDMEMBER(key, 1, UserInfo.class);
+        List<UserInfo> list1 = RedisDefined.TestRedis.SRandMember(key, 1, UserInfo.class);
         Assert.assertNotNull(list1);
         Assert.assertEquals(list1.size(), 1);
 
-        long SCARD1 = RedisDefined.TestRedis.SCARD(key);
+        long SCARD1 = RedisDefined.TestRedis.SCard(key);
         for (int i = 0; i < SCARD1; i++) {
-            UserInfo userInfoTmp = RedisDefined.TestRedis.SPOP(key, UserInfo.class);
+            UserInfo userInfoTmp = RedisDefined.TestRedis.SPop(key, UserInfo.class);
             System.out.println("age: " + userInfoTmp.getAge());
             Assert.assertNotNull(userInfoTmp);
         }
 
-        long SCARD2 = RedisDefined.TestRedis.SCARD(key);
+        long SCARD2 = RedisDefined.TestRedis.SCard(key);
         Assert.assertEquals(SCARD2, 0);
     }
 
