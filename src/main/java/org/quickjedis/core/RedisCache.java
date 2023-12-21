@@ -298,6 +298,21 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public Boolean HExists(final String hashId, final String field) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            return redisClient.hexists(hashId, field);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return null;
+    }
+
+    @Override
     public <T> T HGet(final String key, final String field, final Class<T> className) {
         try {
             byte[] bytes = this.hGetBytes(key, field);

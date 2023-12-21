@@ -72,6 +72,9 @@ public abstract class Redis extends CacheBase
     abstract Dictionary<String, String> HGetAll(final String hashId);
 
     @Override
+    public abstract Boolean HExists(final String hashId, final String field);
+
+    @Override
     public abstract <T> T HGet(final String hashId, final String field, final Class<T> className);
 
     @Override
@@ -158,7 +161,6 @@ public abstract class Redis extends CacheBase
     abstract boolean Remove(final String key);
 
 
-
     @Override
     public abstract <T> long SAdd(final String setid, final T... member);
 
@@ -192,14 +194,14 @@ public abstract class Redis extends CacheBase
 
     @Override
     public abstract <T> HashMap<T, Double> ZRangeByScoreWithScores(final String key, final double min, final double max,
-                                                   final Class<T> className);
+                                                                   final Class<T> className);
 
     @Override
     public abstract <T> Set<T> ZRangeByScore(final String key, final double min, final double max, final Class<T> className);
 
     @Override
     public abstract <T> HashMap<T, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min,
-                                                      final Class<T> className);
+                                                                      final Class<T> className);
 
     @Override
     public abstract <T> Set<T> ZRevRangeByScore(final String setid, final double max, final double min, final Class<T> className);
