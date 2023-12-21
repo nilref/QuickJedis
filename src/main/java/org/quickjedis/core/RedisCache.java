@@ -176,7 +176,7 @@ public class RedisCache extends Redis {
         if (bytes != null)
             return this.BytesToString(bytes);
         else
-            return "";
+            return ConvertHelper.GetDefaultVal(String.class);
     }
 
     @Override
@@ -329,10 +329,14 @@ public class RedisCache extends Redis {
     @Override
     public String HGet(final String key, final String field) {
         try {
-            return this.BytesToString(this.hGetBytes(key, field));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return "";
+            byte[] bytes = this.hGetBytes(key, field);
+            if (bytes != null)
+                return this.BytesToString(bytes);
+            else
+                return ConvertHelper.GetDefaultVal(String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ConvertHelper.GetDefaultVal(String.class);
         }
     }
 
@@ -350,6 +354,11 @@ public class RedisCache extends Redis {
                 redisClient.close();
         }
         return null;
+    }
+
+    @Override
+    public long HSet(final String key, final String field, final String value) {
+        return this.HSet(key, field, this.StringToBytes(value));
     }
 
     @Override

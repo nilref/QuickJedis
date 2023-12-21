@@ -12,7 +12,9 @@ public class HashTest extends MyTest {
     @Test
     public void testString() {
         System.out.println("testString");
-
+        RedisDefined.TestRedis.HSet("Hashkey", "testfield1", "testval");
+        String val1 = RedisDefined.TestRedis.HGet("Hashkey", "testfield1");
+        Assert.assertEquals("testval", val1);
 
     }
 

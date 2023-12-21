@@ -32,6 +32,15 @@ public class StringTest extends MyTest {
 
         String jsonStrTmp = RedisDefined.TestRedis.GetString(key);
         Assert.assertNotNull(jsonStrTmp);
+        Assert.assertEquals(jsonStr, jsonStrTmp);
+
+        boolean res1 = RedisDefined.TestRedis.Set(key, "testStr");
+        Assert.assertTrue(res1);
+
+        String jsonStrTmp1 = RedisDefined.TestRedis.GetString(key);
+        Assert.assertNotNull(jsonStrTmp1);
+        Assert.assertEquals("testStr", jsonStrTmp1);
+
         UserInfo userInfoTmp = JsonHelper.toObject(jsonStrTmp, UserInfo.class);
         Assert.assertNotNull(userInfoTmp);
         Assert.assertEquals(18, userInfoTmp.getAge());
@@ -74,6 +83,7 @@ public class StringTest extends MyTest {
         Assert.assertNotNull(userLstTmp);
         Assert.assertFalse(userLstTmp.isEmpty());
     }
+
     @Test
     public void testIncr() {
         long testkey = 0;

@@ -5,6 +5,7 @@ public interface RedisHash {
 
     /**
      * 判断key对应的HASH中是否存在field
+     *
      * @param hashId
      * @param field
      * @return
@@ -29,6 +30,16 @@ public interface RedisHash {
      * @return
      */
     String HGet(final String hashId, final String field);
+
+    /**
+     * 向 hash 表中写入值
+     * @param key
+     * @param field
+     * @param value
+     * @param <T>
+     * @return
+     */
+    long HSet(final String key, final String field, final String value);
 
     /**
      * 向 hash 表中写入值
