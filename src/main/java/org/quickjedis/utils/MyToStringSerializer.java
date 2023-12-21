@@ -7,14 +7,13 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.TypeSerializer;
 import org.codehaus.jackson.map.ser.SerializerBase;
-import org.codehaus.jackson.map.ser.ToStringSerializer;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
 public class MyToStringSerializer extends SerializerBase<Object> {
-    public static final ToStringSerializer instance = new ToStringSerializer();
+    public static final MyToStringSerializer instance = new MyToStringSerializer();
 
     public MyToStringSerializer() {
         super(Object.class);
