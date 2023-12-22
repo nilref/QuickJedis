@@ -11,6 +11,15 @@ public interface RedisSet {
      * @param member
      * @return
      */
+    long SAdd(final String setid, final String... member);
+
+    /**
+     * 将一个或多个元素添加到集合中
+     *
+     * @param setid
+     * @param member
+     * @return
+     */
     <T> long SAdd(final String setid, final T... member);
 
     /**
@@ -30,6 +39,14 @@ public interface RedisSet {
     /**
      * 获取集合中的所有元素
      * @param setid
+     * @return
+     */
+    List<String> SMembers(final String setid);
+
+    /**
+     * 获取集合中的所有元素
+     *
+     * @param setid
      * @param className
      * @param <T>
      * @return
@@ -40,11 +57,27 @@ public interface RedisSet {
     /**
      * 从集合中随机移除并返回一个或多个元素
      * @param setid
+     * @return
+     */
+    String SPop(final String setid);
+
+    /**
+     * 从集合中随机移除并返回一个或多个元素
+     *
+     * @param setid
      * @param className
      * @param <T>
      * @return
      */
     <T> T SPop(final String setid, final Class<T> className);
+
+    /**
+     * 从集合中随机返回一个或多个元素，但并不会从集合中删除这些元素
+     * @param setid
+     * @param count
+     * @return
+     */
+    List<String> SRandMember(final String setid, int count);
 
     /**
      * 从集合中随机返回一个或多个元素，但并不会从集合中删除这些元素

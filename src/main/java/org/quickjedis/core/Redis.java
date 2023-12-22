@@ -12,10 +12,6 @@ import org.quickjedis.impl.RedisSet;
 import org.quickjedis.impl.RedisSortedSet;
 import org.quickjedis.impl.RedisString;
 
-import redis.clients.jedis.Tuple;
-
-import javax.xml.bind.annotation.XmlValue;
-
 public abstract class Redis extends CacheBase
         implements RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisSortedSet {
     public Redis(final String name) {
@@ -104,58 +100,33 @@ public abstract class Redis extends CacheBase
     @Override
     public abstract long LLen(final String queueId);
 
-    /**
-     * 将一个值插入到列表头部
-     *
-     * @param queueId
-     * @param value
-     * @param <T>
-     * @return
-     */
+    @Override
+    public abstract long LPush(final String queueId, final String value);
+
     @Override
     public abstract <T> long LPush(final String queueId, final T value);
 
-    /**
-     * 将多个值插入到列表头部
-     *
-     * @param queueId
-     * @param value
-     * @param <T>
-     * @return
-     */
+    @Override
+    public abstract long LPush(final String queueId, final String... value);
+
     @Override
     public abstract <T> long LPush(final String queueId, final T... value);
 
-    /**
-     * 将一个值插入到列表尾部
-     *
-     * @param queueId
-     * @param value
-     * @param <T>
-     * @return
-     */
+    @Override
+    public abstract long RPush(final String queueId, final String value);
+
     @Override
     public abstract <T> long RPush(final String queueId, final T value);
 
-    /**
-     * 将多个值插入到列表尾部
-     *
-     * @param queueId
-     * @param value
-     * @param <T>
-     * @return
-     */
+    @Override
+    public abstract long RPush(final String queueId, final String... value);
+
     @Override
     public abstract <T> long RPush(final String queueId, final T... value);
 
-    /**
-     * 从列表的尾部取出一个值
-     *
-     * @param queueId
-     * @param className
-     * @param <T>
-     * @return
-     */
+    @Override
+    public abstract String RPop(final String queueId);
+
     @Override
     public abstract <T> T RPop(final String queueId, final Class<T> className);
 
@@ -163,21 +134,31 @@ public abstract class Redis extends CacheBase
 
     abstract boolean Remove(final String key);
 
+    @Override
+    public abstract long SAdd(final String setid, final String... member);
 
     @Override
     public abstract <T> long SAdd(final String setid, final T... member);
 
     abstract long SREM(final String setid, final String member);
 
-
     @Override
     public abstract long SCard(final String setid);
+
+    @Override
+    public abstract String SPop(final String setid);
 
     @Override
     public abstract <T> T SPop(final String setid, final Class<T> className);
 
     @Override
+    public abstract List<String> SMembers(final String setid);
+
+    @Override
     public abstract <T> List<T> SMembers(final String setid, final Class<T> className);
+
+    @Override
+    public abstract List<String> SRandMember(final String setid, int count);
 
     @Override
     public abstract <T> List<T> SRandMember(final String setid, int count, final Class<T> className);
@@ -193,18 +174,33 @@ public abstract class Redis extends CacheBase
     public abstract long ZCount(final String setid, final double min, final double max);
 
     @Override
+    public abstract long ZAdd(final String setid, final String member, final double score);
+
+    @Override
     public abstract <T> long ZAdd(final String setid, final T member, final double score);
+
+    @Override
+    public abstract HashMap<String, Double> ZRangeByScoreWithScores(final String key, final double min, final double max);
 
     @Override
     public abstract <T> HashMap<T, Double> ZRangeByScoreWithScores(final String key, final double min, final double max,
                                                                    final Class<T> className);
 
     @Override
+    public abstract Set<String> ZRangeByScore(final String key, final double min, final double max);
+
+    @Override
     public abstract <T> Set<T> ZRangeByScore(final String key, final double min, final double max, final Class<T> className);
+
+    @Override
+    public abstract HashMap<String, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min);
 
     @Override
     public abstract <T> HashMap<T, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min,
                                                                       final Class<T> className);
+
+    @Override
+    public abstract Set<String> ZRevRangeByScore(final String setid, final double max, final double min);
 
     @Override
     public abstract <T> Set<T> ZRevRangeByScore(final String setid, final double max, final double min, final Class<T> className);

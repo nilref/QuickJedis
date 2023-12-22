@@ -452,12 +452,48 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public long LPush(final String queueId, final String value) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            return redisClient.lpush(keyArray, this.StringToBytes(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
     public <T> long LPush(final String queueId, final T value) {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
             byte[] keyArray = this.StringToBytes(queueId);
             return redisClient.lpush(keyArray, this.ObjectToBson(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
+    public long LPush(final String queueId, final String... valueArray) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (String value : valueArray) {
+                valueList.add(this.StringToBytes(value));
+            }
+            return redisClient.lpush(keyArray, valueList.toArray(new byte[0][]));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -488,12 +524,48 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public long RPush(final String queueId, final String value) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            return redisClient.rpush(keyArray, this.StringToBytes(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
     public <T> long RPush(final String queueId, final T value) {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
             byte[] keyArray = this.StringToBytes(queueId);
             return redisClient.rpush(keyArray, this.ObjectToBson(value));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
+    public long RPush(final String queueId, final String... valueArray) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (String value : valueArray) {
+                valueList.add(this.StringToBytes(value));
+            }
+            return redisClient.rpush(keyArray, valueList.toArray(new byte[0][]));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -521,6 +593,27 @@ public class RedisCache extends Redis {
                 redisClient.close();
         }
         return 0;
+    }
+
+    @Override
+    public String RPop(final String queueId) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(queueId);
+            byte[] bytes = redisClient.rpop(keyArray);
+            if (bytes != null) {
+                return this.BytesToString(bytes);
+            } else {
+                return ConvertHelper.GetDefaultVal(String.class);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return ConvertHelper.GetDefaultVal(String.class);
     }
 
     @Override
@@ -566,6 +659,26 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public long SAdd(final String setid, final String... member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            List<byte[]> valueList = new ArrayList<byte[]>();
+            for (String value : member) {
+                valueList.add(this.StringToBytes(value));
+            }
+            return redisClient.sadd(keyArray, valueList.toArray(new byte[0][]));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
     public <T> long SAdd(final String setid, final T... member) {
         Jedis redisClient = null;
         try {
@@ -592,6 +705,27 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public String SPop(final String setid) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            byte[] bytes = redisClient.spop(keyArray);
+            if (bytes != null) {
+                return this.BytesToString(bytes);
+            } else {
+                return ConvertHelper.GetDefaultVal(String.class);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return ConvertHelper.GetDefaultVal(String.class);
+    }
+
+    @Override
     public <T> T SPop(final String setid, final Class<T> className) {
         Jedis redisClient = null;
         try {
@@ -613,6 +747,32 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public List<String> SMembers(final String setid) {
+        List<String> list = new ArrayList<String>();
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            Set<byte[]> set = redisClient.smembers(keyArray);
+            if (set != null) {
+                for (byte[] bytes : set) {
+                    list.add(this.BytesToString(bytes));
+                }
+                return list;
+            } else {
+                return list;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return null;
+    }
+
+    @Override
     public <T> List<T> SMembers(final String setid, final Class<T> className) {
         List<T> list = new ArrayList<T>();
         Jedis redisClient = null;
@@ -623,6 +783,32 @@ public class RedisCache extends Redis {
             if (set != null) {
                 for (byte[] bytes : set) {
                     list.add(this.BsonToObject(bytes, className));
+                }
+                return list;
+            } else {
+                return list;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return null;
+    }
+
+    @Override
+    public List<String> SRandMember(final String setid, int count) {
+        List<String> list = new ArrayList<String>();
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyArray = this.StringToBytes(setid);
+            List<byte[]> set = redisClient.srandmember(keyArray, count);
+            if (set != null) {
+                for (byte[] bytes : set) {
+                    list.add(this.BytesToString(bytes));
                 }
                 return list;
             } else {
@@ -706,6 +892,23 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public long ZAdd(final String setid, final String member, final double score) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyBytes = this.StringToBytes(setid);
+            byte[] memberBytes = this.StringToBytes(member);
+            return redisClient.zadd(keyBytes, score, memberBytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
     public <T> long ZAdd(final String setid, final T member, final double score) {
         Jedis redisClient = null;
         try {
@@ -738,6 +941,24 @@ public class RedisCache extends Redis {
     public double ZINCRBY(final String setid, final String member, final int increment) {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public HashMap<String, Double> ZRangeWithScores(final String key, final long start, final long stop) {
+        try {
+            Set<Tuple> sets = this.zRangeWithScores(key, start, stop);
+            HashMap<String, Double> hashMap = new HashMap<String, Double>();
+            Object[] objs = sets.toArray();
+            for (Object obj : objs) {
+                Tuple tuple = (Tuple) obj;
+                hashMap.put(this.BytesToString(tuple.getBinaryElement()), tuple.getScore());
+            }
+            return hashMap;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
@@ -775,6 +996,21 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public Set<String> ZRange(final String key, final long start, final long stop) {
+        try {
+            Set<byte[]> setBytes = this.zRange(key, start, stop);
+            Set<String> sets = new HashSet<String>();
+            for (final byte[] bytes : setBytes) {
+                sets.add(this.BytesToString(bytes));
+            }
+            return sets;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public <T> Set<T> ZRange(final String key, final long start, final long stop, final Class<T> className) {
         try {
             Set<byte[]> setBytes = this.zRange(key, start, stop);
@@ -804,6 +1040,23 @@ public class RedisCache extends Redis {
         return null;
     }
 
+    @Override
+    public HashMap<String, Double> ZRevRangeWithScores(final String setid, final long start, final long stop) {
+        try {
+            Set<Tuple> sets = this.zRevRangeWithScores(setid, start, stop);
+            HashMap<String, Double> hashMap = new HashMap<String, Double>();
+            Object[] objs = sets.toArray();
+            for (Object obj : objs) {
+                Tuple tuple = (Tuple) obj;
+                hashMap.put(this.BytesToString(tuple.getBinaryElement()), tuple.getScore());
+            }
+            return hashMap;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
 
     @Override
     public <T> HashMap<T, Double> ZRevRangeWithScores(final String setid, final long start, final long stop,
@@ -839,6 +1092,21 @@ public class RedisCache extends Redis {
     }
 
     @Override
+    public Set<String> ZRevRange(final String setid, final long start, final long stop) {
+        try {
+            Set<byte[]> setBytes = this.zRevRange(setid, start, stop);
+            Set<String> sets = new HashSet<String>();
+            for (final byte[] bytes : setBytes) {
+                sets.add(this.BytesToString(bytes));
+            }
+            return sets;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public <T> Set<T> ZRevRange(final String setid, final long start, final long stop, final Class<T> className) {
         try {
             Set<byte[]> setBytes = this.zRevRange(setid, start, stop);
@@ -868,6 +1136,22 @@ public class RedisCache extends Redis {
         return null;
     }
 
+    @Override
+    public HashMap<String, Double> ZRangeByScoreWithScores(final String key, final double min, final double max) {
+        try {
+            Set<Tuple> sets = this.zRangeByScoreWithScores(key, min, max);
+            HashMap<String, Double> hashMap = new HashMap<String, Double>();
+            Object[] objs = sets.toArray();
+            for (Object obj : objs) {
+                Tuple tuple = (Tuple) obj;
+                hashMap.put(this.BytesToString(tuple.getBinaryElement()), tuple.getScore());
+            }
+            return hashMap;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public <T> HashMap<T, Double> ZRangeByScoreWithScores(final String key, final double min, final double max,
@@ -885,7 +1169,6 @@ public class RedisCache extends Redis {
             ex.printStackTrace();
             return null;
         }
-
     }
 
     private Set<Tuple> zRangeByScoreWithScores(final String key, final double min, final double max) {
@@ -901,6 +1184,21 @@ public class RedisCache extends Redis {
                 redisClient.close();
         }
         return null;
+    }
+
+    @Override
+    public Set<String> ZRangeByScore(final String key, final double min, final double max) {
+        try {
+            Set<byte[]> setBytes = this.zRangeByScore(key, min, max);
+            Set<String> sets = new HashSet<String>();
+            for (final byte[] bytes : setBytes) {
+                sets.add(this.BytesToString(bytes));
+            }
+            return sets;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -933,6 +1231,22 @@ public class RedisCache extends Redis {
         return null;
     }
 
+    @Override
+    public HashMap<String, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min) {
+        try {
+            Set<Tuple> sets = this.zRevRangeByScoreWithScores(setid, max, min);
+            HashMap<String, Double> hashMap = new HashMap<String, Double>();
+            Object[] objs = sets.toArray();
+            for (Object obj : objs) {
+                Tuple tuple = (Tuple) obj;
+                hashMap.put(this.BytesToString(tuple.getBinaryElement()), tuple.getScore());
+            }
+            return hashMap;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public <T> HashMap<T, Double> ZRevRangeByScoreWithScores(final String setid, final double max, final double min,
@@ -950,7 +1264,6 @@ public class RedisCache extends Redis {
             ex.printStackTrace();
             return null;
         }
-
     }
 
     private Set<Tuple> zRevRangeByScoreWithScores(final String setid, final double max, final double min) {
@@ -965,6 +1278,21 @@ public class RedisCache extends Redis {
                 redisClient.close();
         }
         return null;
+    }
+
+    @Override
+    public Set<String> ZRevRangeByScore(final String setid, final double max, final double min) {
+        try {
+            Set<byte[]> setBytes = this.zRevRangeByScore(setid, max, min);
+            Set<String> sets = new HashSet<String>();
+            for (final byte[] bytes : setBytes) {
+                sets.add(this.BytesToString(bytes));
+            }
+            return sets;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
