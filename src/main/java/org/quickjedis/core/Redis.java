@@ -242,5 +242,6 @@ public abstract class Redis extends CacheBase
 
     abstract boolean Ping();
 
-    abstract List<String> SearchKeys(final String pattern);
+    @Override
+    public abstract List<String> Keys(final String pattern);
 }

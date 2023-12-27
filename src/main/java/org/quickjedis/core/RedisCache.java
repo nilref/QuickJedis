@@ -1392,8 +1392,24 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public List<String> SearchKeys(final String pattern) {
-        // TODO Auto-generated method stub
+    public List<String> Keys(final String pattern) {
+        List<String> list = new ArrayList<String>();
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            Set<String> set = redisClient.keys(pattern);
+            if (set != null) {
+                for (String key : set) {
+                    list.add(key);
+                }
+            }
+            return list;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return null;
     }
 
