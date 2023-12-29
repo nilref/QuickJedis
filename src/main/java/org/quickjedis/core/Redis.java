@@ -89,7 +89,8 @@ public abstract class Redis extends CacheBase
 
     abstract List<String> HMGet(final String hashId, final List<String> keyList);
 
-    abstract long HDel(final String hashId, final String field);
+    @Override
+    public abstract long HDel(final String hashId, final String field);
 
     abstract long HLen(final String hashId);
 

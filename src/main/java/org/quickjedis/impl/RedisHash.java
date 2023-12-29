@@ -1,7 +1,13 @@
 package org.quickjedis.impl;
 
 public interface RedisHash {
-    // HDEL
+    /**
+     * 删除 HASH 表中的 field
+     * @param hashId
+     * @param field
+     * @return
+     */
+    long HDel(final String hashId, final String field);
 
     /**
      * 判断key对应的HASH中是否存在field
@@ -36,7 +42,6 @@ public interface RedisHash {
      * @param key
      * @param field
      * @param value
-     * @param <T>
      * @return
      */
     long HSet(final String key, final String field, final String value);

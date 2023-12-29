@@ -426,7 +426,16 @@ public class RedisCache extends Redis {
 
     @Override
     public long HDel(final String hashId, final String field) {
-        // TODO Auto-generated method stub
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            return redisClient.hdel(hashId, field);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
