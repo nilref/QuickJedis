@@ -3,14 +3,18 @@ package org.quickjedis.utils;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 
 public class JsonHelper {
     private static JacksonObjectMapper objectMapper = null;
 
     static {
         objectMapper = new JacksonObjectMapper();
+        //将浮点型反序列化成BigDecimal
+        objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS)
+                .enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
     }
 
     /**
