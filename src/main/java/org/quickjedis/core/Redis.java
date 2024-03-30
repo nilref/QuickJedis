@@ -208,7 +208,11 @@ public abstract class Redis extends CacheBase
 
     abstract long ZREM(final String setid, final String member);
 
-    abstract double ZSCORE(final String setid, final String member);
+    @Override
+    public abstract double ZScore(final String setid, final String member);
+
+    @Override
+    public abstract <T> double ZScore(final String setid, final T member);
 
     abstract double ZINCRBY(final String setid, final String member, final int increment);
 

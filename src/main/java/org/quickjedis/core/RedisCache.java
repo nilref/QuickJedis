@@ -935,13 +935,42 @@ public class RedisCache extends Redis {
     }
 
     @Override
-    public long ZREM(final String setid, final String member) {
-        // TODO Auto-generated method stub
+    public double ZScore(final String setid, final String member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyBytes = this.StringToBytes(setid);
+            byte[] memberBytes = this.StringToBytes(member);
+            return redisClient.zscore(keyBytes, memberBytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
         return 0;
     }
 
     @Override
-    public double ZSCORE(final String setid, final String member) {
+    public <T> double ZScore(final String setid, final T member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyBytes = this.StringToBytes(setid);
+            byte[] memberBytes = this.ObjectToBson(member);
+            return redisClient.zscore(keyBytes, memberBytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+
+    @Override
+    public long ZREM(final String setid, final String member) {
         // TODO Auto-generated method stub
         return 0;
     }

@@ -217,8 +217,23 @@ public interface RedisSortedSet {
      */
     <T> Set<T> ZRevRangeByScore(final String setid, final double max, final double min, final Class<T> className);
 
+    /**
+     * 返回有序集合中指定对象的score
+     * @param setid
+     * @param member
+     * @return
+     */
+     double ZScore(final String setid, final String member);
+
+    /**
+     * 返回有序集合中指定对象的score
+     * @param setid
+     * @param member
+     * @return
+     */
+     <T> double ZScore(final String setid, final T member);
+
     // ZREVRANK
-    // ZSCORE
     // ZUNIONSTORE
     // ZINTERSTORE
     // ZSCAN
