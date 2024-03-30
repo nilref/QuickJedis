@@ -957,14 +957,14 @@ public class RedisCache extends Redis {
             if (score != null)
                 return score;
             else
-                return 0;
+                return -1;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -978,14 +978,14 @@ public class RedisCache extends Redis {
             if (score != null)
                 return score;
             else
-                return 0;
+                return -1;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
