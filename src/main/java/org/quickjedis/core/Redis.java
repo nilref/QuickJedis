@@ -11,6 +11,7 @@ import org.quickjedis.impl.RedisList;
 import org.quickjedis.impl.RedisSet;
 import org.quickjedis.impl.RedisSortedSet;
 import org.quickjedis.impl.RedisString;
+import redis.clients.jedis.Jedis;
 
 public abstract class Redis extends CacheBase
         implements RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisSortedSet {
@@ -214,21 +215,31 @@ public abstract class Redis extends CacheBase
     @Override
     public abstract <T> double ZScore(final String setid, final T member);
 
+    @Override
+    public abstract long ZRank(final String setid, final String member);
+
+    @Override
+    public abstract <T> long ZRank(final String setid, final T member);
+
     abstract double ZINCRBY(final String setid, final String member, final int increment);
 
     @Override
-    public abstract <T> Set<T> ZRange(final String key, final long start, final long stop, final Class<T> className);
+    public abstract <T> Set<T> ZRange(final String key, final long start, final long stop,
+                                      final Class<T> className);
 
     @Override
-    public abstract <T> HashMap<T, Double> ZRangeWithScores(final String key, final long start, final long stop,
+    public abstract <T> HashMap<T, Double> ZRangeWithScores(final String key, final long start,
+                                                            final long stop,
                                                             final Class<T> className);
 
     @Override
-    public abstract <T> HashMap<T, Double> ZRevRangeWithScores(final String setid, final long start, final long stop,
+    public abstract <T> HashMap<T, Double> ZRevRangeWithScores(final String setid, final long start,
+                                                               final long stop,
                                                                final Class<T> className);
 
     @Override
-    public abstract <T> Set<T> ZRevRange(final String setid, final long start, final long stop, final Class<T> className);
+    public abstract <T> Set<T> ZRevRange(final String setid, final long start, final long stop,
+                                         final Class<T> className);
 
     abstract long ZREMRANGEBYRANK(final String setid, final int min, final int max);
 

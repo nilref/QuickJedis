@@ -968,6 +968,39 @@ public class RedisCache extends Redis {
         return 0;
     }
 
+    @Override
+    public long ZRank(final String setid, final String member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyBytes = this.StringToBytes(setid);
+            byte[] memberBytes = this.StringToBytes(member);
+            return redisClient.zrank(keyBytes, memberBytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
+
+    @Override
+    public <T> long ZRank(final String setid, final T member) {
+        Jedis redisClient = null;
+        try {
+            redisClient = this.GetResource();
+            byte[] keyBytes = this.StringToBytes(setid);
+            byte[] memberBytes = this.ObjectToBson(member);
+            return redisClient.zrank(keyBytes, memberBytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (redisClient != null)
+                redisClient.close();
+        }
+        return 0;
+    }
 
     @Override
     public long ZREM(final String setid, final String member) {

@@ -233,6 +233,23 @@ public interface RedisSortedSet {
      */
      <T> double ZScore(final String setid, final T member);
 
+    /**
+     * 返回有序集中指定成员的排名
+     * @param setid
+     * @param member
+     * @return
+     */
+    long ZRank(final String setid, final String member);
+
+    /**
+     * 返回有序集中指定成员的排名
+     * @param setid
+     * @param member
+     * @param <T>
+     * @return
+     */
+    <T> long ZRank(final String setid, final T member);
+
     // ZREVRANK
     // ZUNIONSTORE
     // ZINTERSTORE
