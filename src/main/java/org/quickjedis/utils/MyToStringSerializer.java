@@ -1,39 +1,26 @@
 package org.quickjedis.utils;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.TypeSerializer;
-import org.codehaus.jackson.map.ser.SerializerBase;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
-public class MyToStringSerializer extends SerializerBase<Object> {
+public class MyToStringSerializer extends JsonSerializer<Object> {
     public static final MyToStringSerializer instance = new MyToStringSerializer();
 
-    public MyToStringSerializer() {
-        super(Object.class);
-    }
-
-    public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
-        if(value.getClass() == BigDecimal.class){
-            jgen.writeString(((BigDecimal) value).toPlainString());
-        }else {
-            jgen.writeString(value.toString());
+    @Override
+    public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+        if (value.getClass() == Double.class) {
+            //Double 不使用科学计数法，可保留最大精度16位（小数点前位数+小数点后位数=16）
+            jgen.writeNumber(new BigDecimal(value.toString()).toPlainString());
+        } else if (value.getClass() == Float.class) {
+            //Float 不使用科学计数法，可保留最大精度8位（小数点前位数+小数点后位数=8）
+            jgen.writeNumber(new BigDecimal(value.toString()).toPlainString());
+        } else {
+            jgen.writeNumber(((BigDecimal) value).toPlainString());
         }
     }
 
-    public void serializeWithType(Object value, JsonGenerator jgen, SerializerProvider provider, TypeSerializer typeSer) throws IOException, JsonGenerationException {
-        typeSer.writeTypePrefixForScalar(value, jgen);
-        this.serialize(value, jgen, provider);
-        typeSer.writeTypeSuffixForScalar(value, jgen);
-    }
-
-    public JsonNode getSchema(SerializerProvider provider, Type typeHint) throws JsonMappingException {
-        return this.createSchemaNode("string", true);
-    }
 }
