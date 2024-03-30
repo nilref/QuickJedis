@@ -8,7 +8,7 @@ public class SortedSetTest extends MyTest {
     public void testString() {
         System.out.println("testString");
 
-
+        double score = RedisDefined.TestRedis.ZScore("test", "test");
     }
 
     @Test

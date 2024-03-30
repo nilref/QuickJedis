@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.quickjedis.utils.ConvertHelper;
-import org.quickjedis.utils.JsonHelper;
+import org.quickjedis.utils.JsonUtil;
 
 import junit.framework.Assert;
 
@@ -26,7 +26,7 @@ public class StringTest extends MyTest {
     public void testString() {
         System.out.println("testString");
 
-        String jsonStr = JsonHelper.toJson(userInfo);
+        String jsonStr = JsonUtil.toJson(userInfo);
         boolean res = RedisDefined.TestRedis.Set(key, jsonStr);
         Assert.assertTrue(res);
 
@@ -41,7 +41,7 @@ public class StringTest extends MyTest {
         Assert.assertNotNull(jsonStrTmp1);
         Assert.assertEquals("testStr", jsonStrTmp1);
 
-        UserInfo userInfoTmp = JsonHelper.toObject(jsonStrTmp, UserInfo.class);
+        UserInfo userInfoTmp = JsonUtil.toObject(jsonStrTmp, UserInfo.class);
         Assert.assertNotNull(userInfoTmp);
         Assert.assertEquals(18, userInfoTmp.getAge());
     }
@@ -49,13 +49,13 @@ public class StringTest extends MyTest {
     @Test
     public void testBytes() throws UnsupportedEncodingException {
         System.out.println("testBytes");
-        byte[] bytes = ConvertHelper.StringToBytes(JsonHelper.toJson(userInfo));
+        byte[] bytes = ConvertHelper.StringToBytes(JsonUtil.toJson(userInfo));
         boolean bl = RedisDefined.TestRedis.Set(key, bytes);
         Assert.assertTrue(bl);
         byte[] userInfoBytes = RedisDefined.TestRedis.GetBytes(key);
         Assert.assertNotNull(userInfoBytes);
         String userInfoStr = new String(userInfoBytes, "UTF-8");
-        UserInfo userInfoTmp = JsonHelper.toObject(userInfoStr, UserInfo.class);
+        UserInfo userInfoTmp = JsonUtil.toObject(userInfoStr, UserInfo.class);
         Assert.assertNotNull(userInfoTmp);
         Assert.assertEquals(18, userInfoTmp.getAge());
     }

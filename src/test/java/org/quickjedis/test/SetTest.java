@@ -2,7 +2,7 @@ package org.quickjedis.test;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.quickjedis.utils.JsonHelper;
+import org.quickjedis.utils.JsonUtil;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class SetTest extends MyTest {
 
         String key = "TEST.SETSTRING";
 
-        String jsonStr = JsonHelper.toJson(userInfo);
+        String jsonStr = JsonUtil.toJson(userInfo);
         long res = RedisDefined.TestRedis.SAdd(key, jsonStr);
         Assert.assertEquals(res, 1);
 
@@ -25,7 +25,7 @@ public class SetTest extends MyTest {
         Assert.assertEquals(res1, 0);
 
         userInfo.setAge(userInfo.getAge() + 1);
-        String jsonStr1 = JsonHelper.toJson(userInfo);
+        String jsonStr1 = JsonUtil.toJson(userInfo);
         long res2 = RedisDefined.TestRedis.SAdd(key, jsonStr1);
         Assert.assertEquals(res2, 1);
 
@@ -40,7 +40,7 @@ public class SetTest extends MyTest {
         long SCARD1 = RedisDefined.TestRedis.SCard(key);
         for (int i = 0; i < SCARD1; i++) {
             String ret = RedisDefined.TestRedis.SPop(key, String.class);
-            UserInfo userInfoTmp = JsonHelper.toObject(ret, UserInfo.class);
+            UserInfo userInfoTmp = JsonUtil.toObject(ret, UserInfo.class);
             System.out.println("age: " + userInfoTmp.getAge());
             Assert.assertNotNull(userInfoTmp);
         }

@@ -2,7 +2,6 @@ package org.quickjedis.test;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.quickjedis.utils.JsonHelper;
 
 public class ListTest extends MyTest {
 

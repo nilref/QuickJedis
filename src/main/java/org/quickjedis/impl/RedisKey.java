@@ -8,7 +8,7 @@ public interface RedisKey {
      *
      * @param key     缓存的 key
      * @param seconds 过期时间，单位：秒
-     * @return
+     * @return 返回true或false
      */
     boolean Expire(final String key, final int seconds);
 
@@ -16,7 +16,7 @@ public interface RedisKey {
      * 查看 key 的到期时间
      *
      * @param key 缓存的 key
-     * @return
+     * @return 返回剩余时间
      */
     long TTL(final String key);
 
@@ -24,7 +24,7 @@ public interface RedisKey {
      * 删除 key 以及对应的内容
      *
      * @param key 缓存的 key
-     * @return
+     * @return 被删除 key 的数量
      */
     long Del(final String key);
 
@@ -34,8 +34,8 @@ public interface RedisKey {
 
     /**
      * 查找所有符合给定模式 pattern 的 key
-     * @param key
-     * @return
+     * @param pattern 匹配字符串
+     * @return 符合给定模式 pattern 的 key
      */
     List<String> Keys(final String pattern);
     // MIGRATE

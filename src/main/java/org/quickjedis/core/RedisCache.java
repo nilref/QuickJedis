@@ -5,7 +5,7 @@ import java.util.*;
 import org.quickjedis.model.RedisResult;
 import org.quickjedis.utils.ConvertHelper;
 import org.quickjedis.utils.ConvertHelper.TryParseResult;
-import org.quickjedis.utils.JsonHelper;
+import org.quickjedis.utils.JsonUtil;
 import org.quickjedis.utils.StringHelper;
 import org.w3c.dom.Node;
 
@@ -119,7 +119,7 @@ public class RedisCache extends Redis {
      */
     private byte[] ObjectToBson(final Object obj) {
         try {
-            return this.StringToBytes(JsonHelper.toJson(obj));
+            return this.StringToBytes(JsonUtil.toJson(obj));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -135,7 +135,7 @@ public class RedisCache extends Redis {
      */
     private <T> T BsonToObject(final byte[] bytes, final Class<T> className) {
         try {
-            return JsonHelper.toObject(this.BytesToString(bytes), className);
+            return JsonUtil.toObject(this.BytesToString(bytes), className);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -147,7 +147,7 @@ public class RedisCache extends Redis {
         try {
             String jsonStr = this.GetString(key);
             if (!StringHelper.IsNullOrEmpty(jsonStr))
-                return JsonHelper.toList(jsonStr, className);
+                return JsonUtil.toList(jsonStr, className);
             else
                 return null;
         } catch (Exception e) {
@@ -1402,15 +1402,6 @@ public class RedisCache extends Redis {
         return -1;
     }
 
-
-    /**
-     * Incr 命令将 key 中储存的数字值增一
-     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作
-     * 本操作的值限制在 64 位(bit)有符号数字表示之内
-     *
-     * @param key
-     * @return
-     */
     @Override
     public long Incr(final String key) {
         Jedis redisClient = null;
