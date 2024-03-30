@@ -278,7 +278,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -294,7 +294,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -379,7 +379,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -396,7 +396,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
 
@@ -436,13 +436,13 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public long HLen(final String hashId) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
@@ -457,7 +457,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -473,7 +473,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -489,7 +489,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -509,7 +509,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -529,7 +529,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -545,7 +545,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -561,7 +561,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -581,7 +581,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -601,7 +601,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -664,7 +664,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -684,7 +684,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -704,13 +704,13 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public long SREM(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
@@ -862,7 +862,7 @@ public class RedisCache extends Redis {
     @Override
     public long SISMEMBER(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
@@ -882,7 +882,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -897,7 +897,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -914,7 +914,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -931,7 +931,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -948,7 +948,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -965,7 +965,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -982,7 +982,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -999,19 +999,19 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public long ZREM(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
     public double ZINCRBY(final String setid, final String member, final int increment) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
@@ -1399,7 +1399,7 @@ public class RedisCache extends Redis {
     @Override
     public long ZREMRANGEBYRANK(final String setid, final int min, final int max) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
 
@@ -1423,31 +1423,31 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public long Decr(final String key) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
     public long Increment(final String key, final int amount) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
     public long Decrement(final String key, final int amount) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
     public long IncrementValueInHash(final String hashId, final String key, final int incrementBy) {
         // TODO Auto-generated method stub
-        return 0;
+        return -1;
     }
 
     @Override
