@@ -278,7 +278,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -294,7 +294,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -379,7 +379,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -396,7 +396,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
 
@@ -436,13 +436,13 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
     public long HLen(final String hashId) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
@@ -457,7 +457,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -473,7 +473,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -489,7 +489,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -509,7 +509,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -529,7 +529,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -545,7 +545,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -561,7 +561,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -581,7 +581,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -601,7 +601,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -657,14 +657,18 @@ public class RedisCache extends Redis {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
-            return redisClient.scard(setid);
+            Long len = redisClient.scard(setid);
+            if (len != null)
+                return len;
+            else
+                return 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -684,7 +688,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -704,13 +708,13 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
     public long SREM(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
@@ -862,7 +866,7 @@ public class RedisCache extends Redis {
     @Override
     public long SISMEMBER(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
@@ -875,14 +879,18 @@ public class RedisCache extends Redis {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
-            return redisClient.zcard(setid);
+            Long count = redisClient.zcard(setid);
+            if (count != null)
+                return count;
+            else
+                return 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -890,14 +898,18 @@ public class RedisCache extends Redis {
         Jedis redisClient = null;
         try {
             redisClient = this.GetResource();
-            return redisClient.zcount(setid, min, max);
+            Long count = redisClient.zcount(setid, min, max);
+            if (count != null)
+                return count;
+            else
+                return 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -914,7 +926,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -931,7 +943,7 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -941,14 +953,18 @@ public class RedisCache extends Redis {
             redisClient = this.GetResource();
             byte[] keyBytes = this.StringToBytes(setid);
             byte[] memberBytes = this.StringToBytes(member);
-            return redisClient.zscore(keyBytes, memberBytes);
+            Double score = redisClient.zscore(keyBytes, memberBytes);
+            if (score != null)
+                return score;
+            else
+                return 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -958,14 +974,18 @@ public class RedisCache extends Redis {
             redisClient = this.GetResource();
             byte[] keyBytes = this.StringToBytes(setid);
             byte[] memberBytes = this.ObjectToBson(member);
-            return redisClient.zscore(keyBytes, memberBytes);
+            Double score = redisClient.zscore(keyBytes, memberBytes);
+            if (score != null)
+                return score;
+            else
+                return 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -975,7 +995,11 @@ public class RedisCache extends Redis {
             redisClient = this.GetResource();
             byte[] keyBytes = this.StringToBytes(setid);
             byte[] memberBytes = this.StringToBytes(member);
-            return redisClient.zrank(keyBytes, memberBytes);
+            Long rank = redisClient.zrank(keyBytes, memberBytes);
+            if (rank != null)
+                return rank;
+            else
+                return -1;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -992,7 +1016,11 @@ public class RedisCache extends Redis {
             redisClient = this.GetResource();
             byte[] keyBytes = this.StringToBytes(setid);
             byte[] memberBytes = this.ObjectToBson(member);
-            return redisClient.zrank(keyBytes, memberBytes);
+            Long rank = redisClient.zrank(keyBytes, memberBytes);
+            if (rank != null)
+                return rank;
+            else
+                return -1;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -1005,13 +1033,13 @@ public class RedisCache extends Redis {
     @Override
     public long ZREM(final String setid, final String member) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
     public double ZINCRBY(final String setid, final String member, final int increment) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
@@ -1399,7 +1427,7 @@ public class RedisCache extends Redis {
     @Override
     public long ZREMRANGEBYRANK(final String setid, final int min, final int max) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
@@ -1414,31 +1442,31 @@ public class RedisCache extends Redis {
             if (redisClient != null)
                 redisClient.close();
         }
-        return -1;
+        return 0;
     }
 
     @Override
     public long Decr(final String key) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
     public long Increment(final String key, final int amount) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
     public long Decrement(final String key, final int amount) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
     public long IncrementValueInHash(final String hashId, final String key, final int incrementBy) {
         // TODO Auto-generated method stub
-        return -1;
+        return 0;
     }
 
     @Override
