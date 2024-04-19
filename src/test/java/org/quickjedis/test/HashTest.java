@@ -16,7 +16,9 @@ public class HashTest extends MyTest {
         RedisDefined.TestRedis.HSet("Hashkey", "testfield2", new String("123456789"));
         String val2 = RedisDefined.TestRedis.HGet("Hashkey", "testfield2");
         Assert.assertEquals("123456789", val2);
-
+        RedisDefined.TestRedis.HSet("Hashkey", "testfield3", true);
+        boolean val3 = RedisDefined.TestRedis.HGet("Hashkey", "testfield3", Boolean.class);
+        Assert.assertEquals(true, val3);
     }
 
     @Test

@@ -135,6 +135,9 @@ public class RedisCache extends Redis {
      */
     private <T> T BsonToObject(final byte[] bytes, final Class<T> className) {
         try {
+            if (className == String.class) {
+                return (T) this.BytesToString(bytes);
+            }
             return JsonUtil.toObject(this.BytesToString(bytes), className);
         } catch (Exception e) {
             e.printStackTrace();
