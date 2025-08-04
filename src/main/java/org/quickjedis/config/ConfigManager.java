@@ -24,13 +24,7 @@ public class ConfigManager {
         XmlCachingConfig xmlCachingConfig = new XmlCachingConfig();
         Node configNode = null;
         String filename = "quick-jedis-config.xml";
-//        String classesPath = FileHelper.GetClassesPath();
-//        final String str = (DirectoryHelper.FilePathSplit.startsWith("/") ? "/" : "")
-//                + Paths.get(classesPath, filename).toString();
-//        if (FileHelper.Exists(str)) {
-//            configNode = XmlHelper.GetXmlNodeFromFile(str, "redis-root");
-//            xmlCachingConfig = new XmlCachingConfig(configNode);
-//        }
+
         InputStream is = ConfigManager.class.getClassLoader().getResourceAsStream(filename);
         if (is != null) {
             configNode = XmlHelper.GetXmlNodeFromFile(is, "redis-root");
